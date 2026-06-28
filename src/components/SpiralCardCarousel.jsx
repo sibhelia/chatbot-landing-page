@@ -186,7 +186,7 @@ function HurricaneVortex() {
 const NAV_ITEMS = ['WEBSITES', 'INSTALLATIONS', 'VR / AR / AI', 'MULTIPLAYER', 'GAMES']
 
 // ─── Ana Bileşen ──────────────────────────────────────────────────────────────
-export default function SpiralCardCarousel({ onBack, enabled }) {
+export default function SpiralCardCarousel({ onBack, onNext, enabled }) {
   const activeIndex = useRef(0)
   const scrollLock  = useRef(false)
   const [activeIdx, setActiveIdx] = useState(0)
@@ -202,16 +202,17 @@ export default function SpiralCardCarousel({ onBack, enabled }) {
         activeIndex.current -= 1
         setActiveIdx(activeIndex.current)
       } else {
-        // Aşağı scroll → sonraki kart
+        // Aşağı scroll → sonraki kart / son kartta landing'e geç
+        if (activeIndex.current === CARD_COUNT - 1) { onNext?.(); return }
         scrollLock.current = true
-        activeIndex.current = (activeIndex.current + 1) % CARD_COUNT
+        activeIndex.current += 1
         setActiveIdx(activeIndex.current)
       }
       setTimeout(() => { scrollLock.current = false }, 750)
     }
     window.addEventListener('wheel', onWheel, { passive: true })
     return () => window.removeEventListener('wheel', onWheel)
-  }, [onBack, enabled])
+  }, [onBack, onNext, enabled])
 
   const card = CARDS[activeIdx]
 
