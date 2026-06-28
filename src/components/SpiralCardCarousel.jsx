@@ -73,7 +73,7 @@ const CARD_H  = 390
 // ─────────────────────────────────────────────────────────────────────────────
 // HurricaneVortex — GPU kasırga shader efekti (arka plan)
 // ─────────────────────────────────────────────────────────────────────────────
-const VORTEX_PTS = 50000
+const VORTEX_PTS = 80000
 
 const vortexVert = /* glsl */ `
   uniform float uTime;
@@ -89,25 +89,32 @@ const vortexVert = /* glsl */ `
     float baseY     = position.y;
     float layer     = position.z;
 
-    float speedMult = 1.0 - layer * 0.28;
-    float theta = baseAngle + uTime * aSpeed * speedMult;
+    float speedMult = 1.0 - layer * 0.22;
 
-    // Huni formu: altta geniş, üstte dar
+    // SARMAL: açı yükseklikle birlikte artar — sarılmış ip / helix görünümü
+    float twist = baseY * 3.2;
+    float theta  = baseAngle + twist + uTime * aSpeed * speedMult;
+
+    // Dramatik huni: üstte çok dar (göz), altta çok geniş (satıh)
     float t      = (baseY + 3.0) / 6.0;
-    float funnel = mix(1.0, 0.25, t);
+    float funnel = mix(1.0, 0.05, t * t * t);   // kübik daralma
     float r      = aRadius * funnel;
 
-    // Dikey akış
-    float y = mod(baseY + uTime * (0.28 + layer * 0.10), 6.0) - 3.0;
+    // Hızlı yukarı akış
+    float y = mod(baseY + uTime * (0.45 + layer * 0.18), 6.0) - 3.0;
 
-    float wobble = sin(baseAngle * 8.5 + uTime * 2.1) * 0.06;
+    // Küçük titreme — organik doku
+    float wobble = sin(baseAngle * 5.0 + uTime * 1.8 + baseY) * 0.035;
 
     vec3 pos = vec3(sin(theta) * (r + wobble), y, cos(theta) * (r + wobble));
     vColor = aColor;
-    vAlpha = (1.0 - clamp(r / 4.0, 0.0, 1.0)) * 0.58 + 0.18;
+
+    // İç katmanlar parlak, dış katmanlar soluk
+    vAlpha = (1.0 - clamp(r / 4.5, 0.0, 1.0)) * 0.70 + 0.15;
 
     gl_Position  = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-    gl_PointSize = aSize * (1.0 - r / 5.5 * 0.30);
+    // Büyük noktalar merkeze yakın
+    gl_PointSize = aSize * (1.0 - r / 6.0 * 0.35) * (1.0 - t * 0.5 + 0.1);
   }
 `
 
