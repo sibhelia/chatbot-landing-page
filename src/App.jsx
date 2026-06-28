@@ -4,7 +4,7 @@ import Scene from './components/Scene'
 import CameraRig from './components/CameraRig'
 import ParticleCloud from './components/ParticleCloud'
 import Overlay from './components/Overlay'
-import CarouselSection from './components/CarouselSection'
+import SpiralCardCarousel from './components/SpiralCardCarousel'
 import { SCENES } from './scenes'
 
 const AUTO_MS    = 5500           // sahne otomatik geçiş süresi (ms)
@@ -57,12 +57,11 @@ export default function App() {
     setTimeout(() => { lockRef.current = false }, (TRANS_DUR + 0.25) * 1000)
   }, [])
 
-  // ── Wheel → PROMETHEUS'ta aşağı scroll = carousel'a geç ──────────────────
+  // ── Wheel → herhangi bir sahnede aşağı scroll = carousel'a geç ──────
   useEffect(() => {
     const onWheel = (e) => {
       if (pageRef.current !== 'scenes') return
-      const isLastScene = currentSceneRef.current === SCENES.length - 1
-      if (isLastScene && e.deltaY > 0) toCarousel()
+      if (e.deltaY > 0) toCarousel()
     }
     window.addEventListener('wheel', onWheel, { passive: true })
     return () => window.removeEventListener('wheel', onWheel)
@@ -124,7 +123,7 @@ export default function App() {
         animate={{ y: page === 'carousel' ? '0%' : '100%' }}
         transition={{ duration: TRANS_DUR, ease: TRANS_EASE }}
       >
-        <CarouselSection onBack={toScenes} enabled={page === 'carousel'} />
+        <SpiralCardCarousel onBack={toScenes} enabled={page === 'carousel'} />
       </motion.div>
 
     </div>
