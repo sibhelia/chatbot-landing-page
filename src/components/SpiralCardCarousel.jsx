@@ -1,8 +1,5 @@
-import { useRef, useState, useEffect, useMemo } from 'react'
-import { useFrame } from '@react-three/fiber'
-import { Canvas } from '@react-three/fiber'
-import { motion, AnimatePresence } from 'framer-motion'
-import * as THREE from 'three'
+import { useRef, useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 
 // ─── Kart Verileri ────────────────────────────────────────────────────────────
 const CARDS = [
@@ -70,124 +67,9 @@ const PERSP   = 1000
 const CARD_W  = 580
 const CARD_H  = 390
 
-// ─────────────────────────────────────────────────────────────────────────────
-// HurricaneVortex — GPU kasırga shader efekti (arka plan)
-// ─────────────────────────────────────────────────────────────────────────────
-const VORTEX_PTS = 80000
-
-const vortexVert = /* glsl */ `
-  uniform float uTime;
-  attribute float aRadius;
-  attribute float aSpeed;
-  attribute float aSize;
-  attribute vec3  aColor;
-  varying   vec3  vColor;
-  varying   float vAlpha;
-
-  void main() {
-    float baseAngle = position.x;
-    float baseY     = position.y;
-    float layer     = position.z;
-
-    float speedMult = 1.0 - layer * 0.22;
-
-    // SARMAL: açı yükseklikle birlikte artar — sarılmış ip / helix görünümü
-    float twist = baseY * 3.2;
-    float theta  = baseAngle + twist + uTime * aSpeed * speedMult;
-
-    // Dramatik huni: üstte çok dar (göz), altta çok geniş (satıh)
-    float t      = (baseY + 3.0) / 6.0;
-    float funnel = mix(1.0, 0.05, t * t * t);   // kübik daralma
-    float r      = aRadius * funnel;
-
-    // Hızlı yukarı akış
-    float y = mod(baseY + uTime * (0.45 + layer * 0.18), 6.0) - 3.0;
-
-    // Küçük titreme — organik doku
-    float wobble = sin(baseAngle * 5.0 + uTime * 1.8 + baseY) * 0.035;
-
-    vec3 pos = vec3(sin(theta) * (r + wobble), y, cos(theta) * (r + wobble));
-    vColor = aColor;
-
-    // İç katmanlar parlak, dış katmanlar soluk
-    vAlpha = (1.0 - clamp(r / 4.5, 0.0, 1.0)) * 0.70 + 0.15;
-
-    gl_Position  = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-    // Büyük noktalar merkeze yakın
-    gl_PointSize = aSize * (1.0 - r / 6.0 * 0.35) * (1.0 - t * 0.5 + 0.1);
-  }
-`
-
-const vortexFrag = /* glsl */ `
-  varying vec3  vColor;
-  varying float vAlpha;
-  void main() {
-    vec2  uv = gl_PointCoord - 0.5;
-    float d  = dot(uv, uv) * 4.0;
-    if (d > 1.0) discard;
-    float glow = exp(-d * 3.2);
-    gl_FragColor = vec4(vColor, glow * vAlpha);
-  }
-`
-
-const LAYERS = [
-  { colors: [new THREE.Color('#60efff'), new THREE.Color('#00bfff')], rMin: 0.2,  rMax: 1.8, sMin: 1.3, sMax: 2.0, szMin: 3.5, szMax: 6.0 },
-  { colors: [new THREE.Color('#c084fc'), new THREE.Color('#818cf8')], rMin: 1.0,  rMax: 3.2, sMin: 0.5, sMax: 1.0, szMin: 2.5, szMax: 4.5 },
-  { colors: [new THREE.Color('#f472b6'), new THREE.Color('#e879f9')], rMin: 2.2,  rMax: 5.0, sMin: 0.2, sMax: 0.5, szMin: 1.5, szMax: 3.2 },
-]
-
-function HurricaneVortex() {
-  const ref = useRef()
-
-  const { geo, mat } = useMemo(() => {
-    const n = VORTEX_PTS
-    const posArr    = new Float32Array(n * 3)
-    const colorArr  = new Float32Array(n * 3)
-    const radiusArr = new Float32Array(n)
-    const speedArr  = new Float32Array(n)
-    const sizeArr   = new Float32Array(n)
-
-    const perLayer = Math.floor(n / LAYERS.length)
-    let idx = 0
-
-    LAYERS.forEach((l, li) => {
-      for (let p = 0; p < perLayer; p++) {
-        posArr[idx * 3]     = Math.random() * Math.PI * 2
-        posArr[idx * 3 + 1] = (Math.random() - 0.5) * 6
-        posArr[idx * 3 + 2] = li
-        radiusArr[idx] = l.rMin + Math.random() * (l.rMax - l.rMin)
-        speedArr[idx]  = l.sMin + Math.random() * (l.sMax - l.sMin)
-        sizeArr[idx]   = l.szMin + Math.random() * (l.szMax - l.szMin)
-        const c = l.colors[Math.floor(Math.random() * l.colors.length)]
-        colorArr[idx * 3]     = c.r
-        colorArr[idx * 3 + 1] = c.g
-        colorArr[idx * 3 + 2] = c.b
-        idx++
-      }
-    })
-
-    const g = new THREE.BufferGeometry()
-    g.setAttribute('position', new THREE.BufferAttribute(posArr,    3))
-    g.setAttribute('aColor',   new THREE.BufferAttribute(colorArr,  3))
-    g.setAttribute('aRadius',  new THREE.BufferAttribute(radiusArr, 1))
-    g.setAttribute('aSpeed',   new THREE.BufferAttribute(speedArr,  1))
-    g.setAttribute('aSize',    new THREE.BufferAttribute(sizeArr,   1))
-
-    const m = new THREE.ShaderMaterial({
-      uniforms:       { uTime: { value: 0 } },
-      vertexShader:   vortexVert,
-      fragmentShader: vortexFrag,
-      transparent:    true,
-      depthWrite:     false,
-      blending:       THREE.AdditiveBlending,
-    })
-    return { geo: g, mat: m }
-  }, [])
-
-  useFrame((_, delta) => { mat.uniforms.uTime.value += delta })
-
-  return <points ref={ref} geometry={geo} material={mat} />
-}
+// NOT: Hurricane sarmalı artık burada DEĞİL — paylaşılan World canvas'ına
+// taşındı (components/HurricaneVortex.jsx + World.jsx). Carousel sadece HTML
+// kart sarmalını çizer; 3B arka plan tüm sayfalarla ortak tek dünyadan gelir.
 
 // ─── Sol Sidebar ──────────────────────────────────────────────────────────────
 const NAV_ITEMS = ['WEBSITES', 'INSTALLATIONS', 'VR / AR / AI', 'MULTIPLAYER', 'GAMES']
@@ -246,17 +128,10 @@ export default function SpiralCardCarousel({ onBack, onNext, enabled }) {
   ].join(' ')
 
   return (
-    <div style={{ position: 'absolute', inset: 0, background: '#020510', overflow: 'hidden' }}>
+    <div style={{ position: 'absolute', inset: 0, background: 'transparent', overflow: 'hidden' }}>
 
-      {/* ── Three.js: hurricane arka plan ──────────────────────────────────── */}
-      <Canvas
-        style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
-        camera={{ position: [0, 0, 3.8], fov: 80 }}
-        gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.4 }}
-      >
-        <ambientLight intensity={0.1} />
-        <HurricaneVortex />
-      </Canvas>
+      {/* Hurricane arka plan artık paylaşılan World canvas'ından geliyor
+          (App → World → HurricaneVortex). Burada yalnızca HTML kartlar var. */}
 
       {/* ── CSS 3D Helix/Sarmal Carousel ─────────────────────────────────── */}
       {/*
@@ -342,6 +217,27 @@ export default function SpiralCardCarousel({ onBack, onNext, enabled }) {
                     pointerEvents: 'none',
                   }}/>
                 )}
+
+                {/* Kart numarası — sol üst */}
+                <div style={{
+                  position:      'absolute',
+                  top:           '1.1rem',
+                  left:          '1.5rem',
+                  pointerEvents: 'none',
+                  fontFamily:    'Orbitron, sans-serif',
+                  fontWeight:    900,
+                  fontSize:      isActive ? '1.5rem' : '1rem',
+                  letterSpacing: '0.04em',
+                  lineHeight:    1,
+                  textShadow:    '0 2px 12px rgba(0,0,0,0.85)',
+                  transition:    'font-size 0.4s',
+                  opacity:       isActive ? 1 : 0.7,
+                }}>
+                  <span style={{ color: c.accent }}>{String(i + 1).padStart(2, '0')}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.55em' }}>
+                    {' '}/ {String(CARD_COUNT).padStart(2, '0')}
+                  </span>
+                </div>
 
                 {/* Kart üzeri yazı — sadece kendi içinde */}
                 <div style={{

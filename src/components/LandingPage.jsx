@@ -684,14 +684,20 @@ export default function LandingPage({ onBack, enabled }) {
         inset:      0,
         overflowY:  'auto',
         overflowX:  'hidden',
-        background: '#020510',
+        background: 'transparent',   // global yıldız alanı arkadan görünsün
         scrollBehavior: 'smooth',
       }}
     >
+      {/* Okunabilirlik perdesi — yıldızları soldurur ama hareketli bırakır */}
+      <div style={{
+        position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0,
+        background: 'rgba(2,5,16,0.62)',
+      }}/>
+
       {/* Arka plan glow efektleri */}
       <div style={{
         position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0,
-        background: 'radial-gradient(ellipse 50% 40% at 20% 20%, rgba(192,132,252,0.04) 0%, transparent 60%), radial-gradient(ellipse 40% 30% at 80% 80%, rgba(96,239,255,0.03) 0%, transparent 60%)',
+        background: 'radial-gradient(ellipse 50% 40% at 20% 20%, rgba(192,132,252,0.06) 0%, transparent 60%), radial-gradient(ellipse 40% 30% at 80% 80%, rgba(96,239,255,0.05) 0%, transparent 60%)',
       }}/>
 
       <div style={{ position: 'relative', zIndex: 1 }}>
