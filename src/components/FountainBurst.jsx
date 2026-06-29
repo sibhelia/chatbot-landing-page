@@ -86,15 +86,15 @@ const burstFrag = /* glsl */`
   }
 `
 
-// Renk paleti — giriş/hurricane buz-mavisi tonu
+// Renk paleti — marka yeşili / beyaz / lacivert (hurricane ile uyumlu)
 const BURST_COLORS = [
   new THREE.Color('#ffffff'),
-  new THREE.Color('#e0f2fe'),
-  new THREE.Color('#bfe6ff'),
-  new THREE.Color('#a5f3fc'),
-  new THREE.Color('#60efff'),
-  new THREE.Color('#7dd3fc'),
-  new THREE.Color('#93c5fd'),
+  new THREE.Color('#d1fae5'),
+  new THREE.Color('#a7f3d0'),
+  new THREE.Color('#6ee7b7'),
+  new THREE.Color('#34d399'),
+  new THREE.Color('#10b981'),
+  new THREE.Color('#60a5fa'),
 ]
 
 export default function FountainBurst({ onDone }) {

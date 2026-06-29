@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion'
 
-const NAV = ['_WHO WE ARE', '_WHAT WE DO', '_OUR MISSION', '_CONTACT']
+const NAV = ['_ÜRÜN', '_ÖZELLİKLER', '_NASIL ÇALIŞIR', '_İLETİŞİM']
 const EASE_OUT = [0.22, 1, 0.36, 1]
 
 const pad = (n) => String(n).padStart(2, '0')
@@ -48,7 +48,7 @@ export default function Overlay({ scene, sceneIndex, totalScenes, autoMs, onNext
           transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
           className="font-orbitron text-white text-[11px] tracking-[0.35em] uppercase"
         >
-          ◈ STUDIO
+          ◈ QABOT
         </motion.div>
         <motion.p
           initial={{ opacity: 0 }}
@@ -56,7 +56,7 @@ export default function Overlay({ scene, sceneIndex, totalScenes, autoMs, onNext
           transition={{ duration: 1.2, delay: 2.2 }}
           className="font-space text-white text-[10px] tracking-[0.3em] uppercase"
         >
-          EST. 2025 — VOL.I
+          AGENTIC RAG · 2026
         </motion.p>
       </div>
 
@@ -163,7 +163,8 @@ export default function Overlay({ scene, sceneIndex, totalScenes, autoMs, onNext
             <div className="relative w-28 h-px bg-white/15 overflow-hidden">
               <motion.div
                 key={`bar-${sceneIndex}`}
-                className="absolute inset-y-0 left-0 bg-white/55"
+                className="absolute inset-y-0 left-0"
+                style={{ background: '#34d399', boxShadow: '0 0 8px #34d39999' }}
                 initial={{ width: '0%' }}
                 animate={{ width: '100%' }}
                 transition={{ duration: autoSecs, ease: 'linear' }}
@@ -217,7 +218,7 @@ export default function Overlay({ scene, sceneIndex, totalScenes, autoMs, onNext
             transition={{ duration: 1.5, delay: 2.2 }}
             className="font-space text-white text-[9px] tracking-[0.3em] uppercase"
           >
-            © 2025 ALL RIGHTS RESERVED
+            © 2026 QABOT — TÜM HAKLARI SAKLIDIR
           </motion.p>
         </div>
       </div>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery Stack</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: transparent;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #root {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.2.0",
+        "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+        "react-dom": "https://esm.sh/react-dom@18.2.0",
+        "framer": "/framer-mock.js",
+        "framer-motion": "https://esm.sh/framer-motion@12.34.3?external=react,react-dom"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    import React from 'react';
+    import { createRoot } from 'react-dom/client';
+    import GalleryStack from 'https://framer.com/m/Gallery-Stack-tv2r.js@3KoRWKf7xnpbehHDCSZf';
+    
+    const root = createRoot(document.getElementById('root'));
+    
+    // Basit bir responsive boyutlandırma
+    const isMobile = window.innerWidth < 1024;
+    const galleryWidth = isMobile ? 340 : 600;
+    const galleryHeight = isMobile ? 220 : 400;
+
+    root.render(React.createElement(GalleryStack, {
+      _1: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&h=400&fit=crop',
+      _2: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=600&h=400&fit=crop',
+      _3: 'https://images.unsplash.com/photo-1621619856624-42fd193a0661?q=80&w=600&h=400&fit=crop',
+      _4: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=600&h=400&fit=crop',
+      _5: 'https://images.unsplash.com/photo-1550684376-efcbd6e3f031?q=80&w=600&h=400&fit=crop',
+      _6: 'https://images.unsplash.com/photo-1574169208507-84376144848b?q=80&w=600&h=400&fit=crop',
+      _7: 'https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=600&h=400&fit=crop',
+      _8: 'https://images.unsplash.com/photo-1581428982868-e410dd44785a?q=80&w=600&h=400&fit=crop',
+      width: galleryWidth,
+      height: galleryHeight
+    }));
+  </script>
+</body>
+</html>

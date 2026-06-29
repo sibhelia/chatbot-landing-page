@@ -18,7 +18,7 @@ import { Canvas } from '@react-three/fiber'
 import * as THREE from 'three'
 import CameraRig from './CameraRig'
 import ParticleCloud from './ParticleCloud'
-import HurricaneVortex from './HurricaneVortex'
+import DnaHelix from './DnaHelix'
 import FountainBurst from './FountainBurst'
 
 const CAM_Z           = 2.8
@@ -39,9 +39,10 @@ export default function World({ starColor, explosionRef, page, burst, onBurstDon
       {/* Yıldızlar — her sayfada sürekli */}
       <ParticleCloud targetColor={starColor} explosionRef={explosionRef} />
 
-      {/* Hurricane sarmalı — carousel'de belirginleşir, diğer sayfalarda solar */}
+      {/* DNA sarmalı — galeri (carousel) sayfasında belirginleşir, diğer
+          sayfalarda solar. Yıldızlarla aynı dünyada → tam bütünlük. */}
       <group scale={HURRICANE_SCALE} position={HURRICANE_POS}>
-        <HurricaneVortex active={page === 'carousel'} />
+        <DnaHelix active={page === 'carousel'} />
       </group>
 
       {/* Fıskiye patlaması — sadece geçişte mount olur, hurricane'den fışkırır */}

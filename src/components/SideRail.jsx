@@ -10,7 +10,7 @@
 import { motion } from 'framer-motion'
 
 const F_ORBIT = 'Orbitron, sans-serif'
-const ACCENT  = '#7fe9ff'
+const ACCENT  = '#34d399'   // marka yeşili
 
 export default function SideRail({ pages, current, onJump, labels = {} }) {
   const currentIdx = Math.max(0, pages.indexOf(current))

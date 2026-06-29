@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
 import World from './components/World'
 import Overlay from './components/Overlay'
-import SpiralCardCarousel from './components/SpiralCardCarousel'
+import FeatureCarousel from './components/FeatureCarousel'
 import LandingPage from './components/LandingPage'
 import SideRail from './components/SideRail'
 import { SCENES } from './scenes'
@@ -12,7 +12,7 @@ const TRANS_DUR  = 0.88
 const TRANS_EASE = [0.4, 0, 0.2, 1]
 
 // Sahneler dışında tüm sayfalarda kullanılan birleşik yıldız tonu (giriş buz-mavisi)
-const UNIFIED_COLOR = '#bfe6ff'
+const UNIFIED_COLOR = '#c7f5e2'   // marka yeşili nane-beyazı (sahneler dışı yıldız tonu)
 
 const PAGES = ['scenes', 'carousel', 'landing']
 
@@ -130,6 +130,8 @@ export default function App() {
             onNext={goNext}
           />
 
+
+
           <motion.div
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
@@ -153,7 +155,7 @@ export default function App() {
           }}
           transition={{ duration: TRANS_DUR, ease: TRANS_EASE }}
         >
-          <SpiralCardCarousel
+          <FeatureCarousel
             onBack={() => goPage('scenes')}
             onNext={() => goPage('landing')}
             enabled={page === 'carousel'}

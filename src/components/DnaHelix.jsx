@@ -1,41 +1,44 @@
 /**
- * HurricaneVortex.jsx  (DNA Helix)
- * ─────────────────────────────────────────────────────────────
- * Carousel arka planındaki UZUN DNA tarzı çoklu-helis yapısı.
- * 4 ayrı sarmal şerit, her biri FARKLI renkte, ortak eksen
- * etrafında DNA gibi sarılır; aralarında ince "merdiven" (rung)
- * basamakları döner. Premium, zarif, sürekli yukarı akar.
+ * DnaHelix.jsx
+ * ════════════════════════════════════════════════════════════════════════════
+ * QABot kimliğinin 3B imzası: UZUN, DNA tarzı çoklu-helis parçacık yapısı.
  *
- * Kendi Canvas'ı YOK — paylaşılan World canvas'ı içinde yıldızlar
- * ve patlama ile AYNI 3B dünyada render edilir. `active` prop'u
- * ile carousel'de belirginleşir, diğer sayfalarda yumuşakça solar.
+ * 4 ayrı sarmal ŞERİT (marka yeşili + beyaz + lacivert) ortak bir eksen
+ * etrafında DNA gibi sarılır; aralarında ince "merdiven" (rung) basamakları
+ * döner. Bilgiyi/veriyi temsil eden, sürekli yukarı akan canlı bir form.
  *
- * ┌─ AYAR ────────────────────────────────────────────────────┐
- * │  HELIX_HEIGHT → sarmalın boyu (uzunluk)                    │
- * │  HELIX_RADIUS → sarmalın genişliği                        │
- * │  TWIST        → birim boyda kaç tur (sıkılık)             │
- * │  STRAND_COLORS→ 4 şeridin renkleri                        │
- * └────────────────────────────────────────────────────────────┘
+ * Kendi Canvas'ı YOKTUR — paylaşılan World canvas'ı içinde yıldızlar ve geçiş
+ * fıskiyesi ile AYNI 3B dünyada render edilir (tam görsel bütünlük). `active`
+ * prop'u ile galeri (carousel) sayfasında belirginleşir, diğer sayfalarda
+ * uOpacity uniform'u lerp ile yumuşakça sıfıra iner.
+ *
+ * ┌─ AYAR ────────────────────────────────────────────────────────────────────┐
+ * │  HELIX_HEIGHT → sarmalın boyu (uzunluk)                                    │
+ * │  HELIX_RADIUS → sarmalın genişliği                                         │
+ * │  TWIST (shader)→ birim boyda kaç tur (sıkılık)                            │
+ * │  STRAND_COLORS→ 4 şeridin renkleri (marka paleti)                         │
+ * └────────────────────────────────────────────────────────────────────────────┘
  */
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
-const POINTS       = 56000
-const STRANDS      = 4
-const RUNG_FRAC    = 0.16     // toplam noktaların merdiven (basamak) oranı
-const HELIX_HEIGHT = 3.6      // dikey yarı-uzunluk (toplam boy = 2×)
-const HELIX_RADIUS = 1.7
+const POINTS       = 56000   // toplam parçacık
+const STRANDS      = 4       // sarmal şerit sayısı
+const RUNG_FRAC    = 0.16    // merdiven (basamak) parçacık oranı
+const HELIX_HEIGHT = 3.6     // dikey yarı-uzunluk (toplam boy = 2×)
+const HELIX_RADIUS = 1.7     // eksenden uzaklık
 
-// 4 şerit — farklı ama premium/serin tonlar
+// 4 şerit — marka yeşili + beyaz + lacivert (farklı tonlar, tek palet)
 const STRAND_COLORS = [
-  new THREE.Color('#67e8f9'),  // cyan
-  new THREE.Color('#a78bfa'),  // menekşe
-  new THREE.Color('#5eead4'),  // teal
-  new THREE.Color('#93c5fd'),  // gök mavisi
+  new THREE.Color('#34d399'),  // zümrüt
+  new THREE.Color('#ffffff'),  // beyaz
+  new THREE.Color('#10b981'),  // marka yeşili
+  new THREE.Color('#60a5fa'),  // lacivert/mavi vurgu
 ]
-const RUNG_COLOR = new THREE.Color('#e6f6ff')  // soluk beyaz basamaklar
+const RUNG_COLOR = new THREE.Color('#a7f3d0')  // soluk nane basamaklar
 
+// Vertex shader — her parçacığı, görünen yüksekliğine göre sarmal konuma yerleştirir
 const vert = /* glsl */ `
   uniform float uTime;
   attribute float aSize;
@@ -44,7 +47,7 @@ const vert = /* glsl */ `
   varying   float vAlpha;
 
   const float VH    = ${HELIX_HEIGHT.toFixed(2)};
-  const float TWIST = 1.55;   // sarılma sıkılığı
+  const float TWIST = 1.55;   // sarılma sıkılığı (birim boyda tur sayısı)
   const float FLOW  = 0.50;   // yukarı akış hızı
   const float ROT   = 0.22;   // tüm yapının yavaş dönüşü
 
@@ -53,7 +56,7 @@ const vert = /* glsl */ `
     float h0     = position.y;   // doğum yüksekliği
     float radius = position.z;   // eksenden uzaklık (rung'larda -R..R)
 
-    // Sürekli yukarı akış (sarılır gibi başa döner)
+    // Sürekli yukarı akış (sonsuz döngü — başa sarılır)
     float y = mod(h0 + uTime * FLOW + VH, 2.0 * VH) - VH;
 
     // Helis: açı GÖRÜNEN yükseklikle artar → tutarlı DNA sarmalı
@@ -72,6 +75,7 @@ const vert = /* glsl */ `
   }
 `
 
+// Fragment shader — yumuşak çekirdek + hale; uOpacity ile genel görünürlük
 const frag = /* glsl */ `
   uniform float uOpacity;
   varying vec3  vColor;
@@ -86,26 +90,25 @@ const frag = /* glsl */ `
   }
 `
 
-export default function HurricaneVortex({ active = false }) {
+export default function DnaHelix({ active = false }) {
   const ref = useRef()
 
+  // Geometriyi bir kez üret: şerit + merdiven parçacıkları
   const { geo, mat } = useMemo(() => {
     const n      = POINTS
     const posArr = new Float32Array(n * 3)
     const colArr = new Float32Array(n * 3)
     const szArr  = new Float32Array(n)
-
     const TWO_PI = Math.PI * 2
 
     for (let i = 0; i < n; i++) {
       const isRung = Math.random() < RUNG_FRAC
-
       let phase0, h, radius, c, size
 
       h = (Math.random() * 2 - 1) * HELIX_HEIGHT
 
       if (!isRung) {
-        // Şerit noktası
+        // Şerit noktası: belirli bir şeride ait, sabit yarıçaplı
         const s = i % STRANDS
         phase0  = s * (TWO_PI / STRANDS) + (Math.random() * 2 - 1) * 0.05
         radius  = HELIX_RADIUS + (Math.random() * 2 - 1) * 0.13
@@ -145,6 +148,7 @@ export default function HurricaneVortex({ active = false }) {
     return { geo: g, mat: m }
   }, [])
 
+  // Zaman ilerlet + görünürlüğü (uOpacity) aktiflik durumuna göre yumuşat
   useFrame((_, delta) => {
     mat.uniforms.uTime.value += delta
     const target  = active ? 1.0 : 0.0
