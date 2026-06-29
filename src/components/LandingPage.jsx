@@ -23,7 +23,15 @@
  * ════════════════════════════════════════════════════════════════════════════
  */
 import { useRef, useEffect, useState } from 'react'
-import { motion, useInView, useScroll, useSpring, useTransform, AnimatePresence } from 'framer-motion'
+import { motion, useInView, useScroll, useSpring, useTransform, useMotionValue, AnimatePresence } from 'framer-motion'
+import Carousel3DFeatures from './Carousel3DFeatures'   // Özellikler bölümü: 3B coverflow karusel
+import StatsCounterPro from './StatsCounterPro'          // Sayılar bölümü: animasyonlu sayaç
+import MagicBentoStats from './MagicBentoStats'          // Pilot bulgular: bento (gerçek metrikler)
+import Pricing from './Pricing'                          // Fiyatlandırma bölümü
+import DepthGallery from './DepthGallery'                // Galeri: 3B depth-blur coverflow
+import TechMarquee from './TechMarquee'                  // Mimari: logo/teknoloji marquee
+import ProcessShowcase from './ProcessShowcase'          // Nasıl çalışır: genişleyen kart showcase
+import UseCasesMosaic from './UseCasesMosaic'            // Çözümler: 8 hücre mozaik
 
 // ─── Marka paleti (yeşil / beyaz / lacivert) ──────────────────────────────────
 const F_ORBIT = 'Orbitron, sans-serif'
@@ -226,220 +234,111 @@ function FeaturedSection({ scrollContainer }) {
 // BÖLÜM 02 — NEDEN QABOT (faydalar)
 // ════════════════════════════════════════════════════════════════════════════
 const BENEFITS = [
-  { icon: '⚡', title: 'SANİYELER İÇİNDE YANIT', desc: 'Belgeler arasında kaybolmadan, aradığınız bilgiye anında ulaşın.', accent: GREEN_LL },
-  { icon: '✓',  title: 'KAYNAĞA DAYALI GÜVEN',   desc: 'Her yanıt belgeye dayanır; onaylananlar "Onaylı" rozetiyle gelir.', accent: GREEN_L },
-  { icon: '◆',  title: 'KODSUZ YÖNETİM',          desc: 'Stüdyo paneliyle kurumsal kimlik ve içerik tamamen sizin elinizde.', accent: MINT },
-  { icon: '↻',  title: 'SÜREKLİ ÖĞRENME',         desc: 'Geri bildirimlerle her etkileşimde daha doğru, daha kurumsal.', accent: NAVY },
+  { icon: '⚡', stat: 3,   suffix: 'sn',  title: 'SANİYELER İÇİNDE YANIT', desc: 'Belgeler arasında kaybolmadan, aradığınız bilgiye anında ulaşın.', accent: GREEN_LL },
+  { icon: '✓',  stat: 100, suffix: '%',   title: 'KAYNAĞA DAYALI GÜVEN',   desc: 'Her yanıt belgeye dayanır; onaylananlar "Onaylı" rozetiyle gelir.', accent: GREEN_L },
+  { icon: '◆',  stat: 0,   suffix: ' kod', title: 'KODSUZ YÖNETİM',         desc: 'Stüdyo paneliyle kurumsal kimlik ve içerik tamamen sizin elinizde.', accent: MINT },
+  { icon: '↻',  stat: 24,  suffix: '/7',  title: 'SÜREKLİ ÖĞRENME',        desc: 'Geri bildirimlerle her etkileşimde daha doğru, daha kurumsal.', accent: NAVY },
 ]
 
+// Tek fayda kartı — fare-takipli 3B eğim (tilt) + nabız atan ikon + kayan
+// parıltı + hover'da büyüme/parlama + animasyonlu sayaç + alt vurgu çubuğu.
+function BenefitCard({ b, i, inView }) {
+  const [hovered, setHovered] = useState(false)
+  const mx = useMotionValue(0)
+  const my = useMotionValue(0)
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [10, -10]), { stiffness: 200, damping: 18 })
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-10, 10]), { stiffness: 200, damping: 18 })
+
+  const onMove = (e) => {
+    const r = e.currentTarget.getBoundingClientRect()
+    mx.set((e.clientX - r.left) / r.width - 0.5)
+    my.set((e.clientY - r.top) / r.height - 0.5)
+  }
+  const onLeave = () => { mx.set(0); my.set(0); setHovered(false) }
+
+  return (
+    <motion.div variants={fadeUp} style={{ perspective: 900 }}>
+      <motion.div
+        onMouseMove={onMove} onMouseEnter={() => setHovered(true)} onMouseLeave={onLeave}
+        animate={{ y: hovered ? -10 : 0 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        style={{
+          position: 'relative', padding: '2rem 1.6rem', borderRadius: '14px', overflow: 'hidden',
+          rotateX, rotateY, transformStyle: 'preserve-3d',
+          border: `1px solid ${b.accent}${hovered ? '66' : '22'}`, background: 'rgba(8,20,16,0.4)',
+          boxShadow: hovered ? `0 26px 70px rgba(0,0,0,0.5), 0 0 42px ${b.accent}2e` : '0 10px 30px rgba(0,0,0,0.35)',
+          transition: 'border-color 0.3s, box-shadow 0.3s',
+        }}>
+        {/* Yüzen yumuşak ışıma */}
+        <div style={{ position: 'absolute', top: '-30%', right: '-20%', width: '150px', height: '150px', borderRadius: '50%',
+          background: `radial-gradient(circle, ${b.accent}26, transparent 70%)`, animation: `floatY ${6 + i}s ease-in-out infinite`, pointerEvents: 'none' }}/>
+        {/* Kayan parıltı (sürekli) */}
+        <motion.div aria-hidden animate={{ x: ['-130%', '240%'] }} transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut', delay: i * 0.45 }}
+          style={{ position: 'absolute', top: 0, bottom: 0, width: '45%', transform: 'skewX(-18deg)', pointerEvents: 'none',
+            background: `linear-gradient(105deg, transparent, ${b.accent}1f, transparent)` }}/>
+
+        {/* İkon + nabız atan halka */}
+        <div style={{ position: 'relative', width: 48, height: 48, marginBottom: '1.3rem' }}>
+          <motion.div animate={{ scale: [1, 1.4, 1], opacity: [0.55, 0, 0.55] }} transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut', delay: i * 0.3 }}
+            style={{ position: 'absolute', inset: 0, borderRadius: '14px', border: `1px solid ${b.accent}` }}/>
+          <motion.div animate={{ scale: hovered ? 1.12 : 1, rotate: hovered ? 6 : 0 }} transition={{ type: 'spring', stiffness: 300, damping: 16 }}
+            style={{ width: 48, height: 48, borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: `${b.accent}1f`, border: `1px solid ${b.accent}55`, color: b.accent, fontSize: '19px' }}>{b.icon}</motion.div>
+        </div>
+
+        {/* Animasyonlu sayaç */}
+        <div style={{ fontFamily: F_ORBIT, fontWeight: 900, fontSize: '1.9rem', lineHeight: 1, marginBottom: '0.6rem',
+          background: `linear-gradient(135deg, #fff, ${b.accent})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <Counter end={b.stat} suffix={b.suffix} isActive={inView} duration={1500 + i * 200} />
+        </div>
+
+        <h3 style={{ fontFamily: F_ORBIT, fontSize: '0.95rem', fontWeight: 700, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.7rem', lineHeight: 1.25 }}>{b.title}</h3>
+        <p style={{ fontFamily: F_SPACE, fontSize: '12.5px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>{b.desc}</p>
+
+        {/* Alt vurgu çubuğu — hover'da soldan sağa açılır */}
+        <motion.div animate={{ scaleX: hovered ? 1 : 0 }} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '3px', transformOrigin: '0% 50%',
+            background: `linear-gradient(90deg, ${b.accent}, transparent)` }}/>
+      </motion.div>
+    </motion.div>
+  )
+}
+
 function BenefitsSection() {
+  const ref    = useRef()
+  const inView = useInView(ref, { once: true, margin: '-15% 0px' })
   return (
     <Section style={{ borderTop: `1px solid ${GREEN_L}1f` }}>
       <SectionLabel num="02" label="NEDEN QABOT" />
       <motion.h2 variants={fadeUp} style={{ fontFamily: F_ORBIT, fontSize: 'clamp(1.8rem, 4vw, 3.4rem)', fontWeight: 900, color: '#fff', textTransform: 'uppercase', marginBottom: '3.5rem', letterSpacing: '-0.01em' }}>
         KURUMSAL BİLGİDE FARK
       </motion.h2>
-      <motion.div variants={stagger(0.08)} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: '1.4rem' }}>
-        {BENEFITS.map((b, i) => (
-          <motion.div key={i} variants={fadeUp} whileHover={{ y: -8 }}
-            style={{ position: 'relative', padding: '2rem 1.6rem', borderRadius: '10px',
-              border: `1px solid ${b.accent}22`, background: 'rgba(8,20,16,0.35)', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: '-30%', right: '-20%', width: '140px', height: '140px', borderRadius: '50%',
-              background: `radial-gradient(circle, ${b.accent}22, transparent 70%)`, animation: `floatY ${6 + i}s ease-in-out infinite` }}/>
-            <div style={{ width: '44px', height: '44px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: `${b.accent}1a`, border: `1px solid ${b.accent}40`, color: b.accent, fontSize: '18px', marginBottom: '1.4rem' }}>{b.icon}</div>
-            <h3 style={{ fontFamily: F_ORBIT, fontSize: '0.95rem', fontWeight: 700, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.7rem', lineHeight: 1.25 }}>{b.title}</h3>
-            <p style={{ fontFamily: F_SPACE, fontSize: '12.5px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>{b.desc}</p>
-          </motion.div>
-        ))}
+      <motion.div ref={ref} variants={stagger(0.1)} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: '1.4rem' }}>
+        {BENEFITS.map((b, i) => <BenefitCard key={i} b={b} i={i} inView={inView} />)}
       </motion.div>
     </Section>
   )
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// BÖLÜM 03 — ÖZELLİKLER
-// ════════════════════════════════════════════════════════════════════════════
-const SERVICES = [
-  { num: '01', name: 'HİBRİT ERİŞİM',           desc: 'ChromaDB vektör araması ile BM25 anahtar-kelime hassasiyetini birleştiren Ensemble Retriever mimarisi.', accent: GREEN_LL },
-  { num: '02', name: 'ONAYLI YANIT',            desc: 'Panelden denetlenip doğruluğu onaylanan yanıtlar "Onaylı" etiketiyle gösterilir; bilgi kirliliği önlenir.', accent: GREEN_L },
-  { num: '03', name: 'YÖNETİM PANELİ',          desc: 'Kurumsal kimlik, kategoriler ve içerikler kod yazmadan, stüdyo modülüyle güncellenir.', accent: MINT },
-  { num: '04', name: 'GERİ BİLDİRİM & ÖĞRENME', desc: 'Kullanıcı düzeltme talepleri anlık izlenir; yapay zekanın öğrenmesi manuel müdahalelerle iyileştirilir.', accent: MINT_L },
-  { num: '05', name: 'ANALİTİK',                desc: 'Kullanım istatistikleri, kredi tüketimi, popüler kategoriler ve yanıt hızı görselleştirilmiş raporlarla sunulur.', accent: NAVY },
-]
+// NOT: BÖLÜM 03 — ÖZELLİKLER artık ayrı bir bileşende: Carousel3DFeatures.jsx
+// (Framer'daki Carousel3D / coverflow tasarımının uyarlaması). LandingPage
+// içinde <Carousel3DFeatures /> olarak render edilir.
 
-function ServicesSection() {
-  const [hovered, setHovered] = useState(-1)
-  return (
-    <Section style={{ background: 'rgba(4,120,87,0.04)', borderTop: `1px solid ${GREEN_L}1f` }}>
-      <SectionLabel num="03" label="NELER SUNAR" />
-      <motion.h2 variants={fadeUp} style={{ fontFamily: F_ORBIT, fontSize: 'clamp(1.8rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', textTransform: 'uppercase', marginBottom: '4rem', letterSpacing: '-0.01em' }}>ÖZELLİKLER</motion.h2>
-      <motion.div variants={stagger(0.05)}>
-        {SERVICES.map((s, i) => (
-          <motion.div key={s.num} variants={fadeUp} onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(-1)}
-            style={{ display: 'flex', alignItems: 'center', gap: '2rem', padding: '1.8rem 0', borderBottom: '1px solid rgba(255,255,255,0.06)',
-              cursor: 'default', transition: 'all 0.3s ease', background: hovered === i ? `${s.accent}10` : 'transparent',
-              paddingLeft: hovered === i ? '1rem' : '0', paddingRight: hovered === i ? '1rem' : '0', borderRadius: '4px' }}>
-            <span style={{ fontFamily: F_ORBIT, fontSize: '10px', color: hovered === i ? s.accent : 'rgba(255,255,255,0.25)', letterSpacing: '0.3em', minWidth: '36px', transition: 'color 0.3s' }}>{s.num}</span>
-            <div style={{ width: '1px', height: '32px', background: 'rgba(255,255,255,0.10)' }}/>
-            <span style={{ fontFamily: F_ORBIT, fontSize: 'clamp(0.95rem, 1.9vw, 1.5rem)', fontWeight: 700, color: hovered === i ? '#fff' : 'rgba(255,255,255,0.75)', textTransform: 'uppercase', flex: 1, letterSpacing: '0.04em', transition: 'color 0.3s' }}>{s.name}</span>
-            <p style={{ fontFamily: F_SPACE, fontSize: '12px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.6, maxWidth: '440px', textAlign: 'right', opacity: hovered === i ? 1 : 0, transform: hovered === i ? 'translateX(0)' : 'translateX(12px)', transition: 'all 0.3s ease' }}>{s.desc}</p>
-            <span style={{ fontFamily: F_ORBIT, fontSize: '14px', color: hovered === i ? s.accent : 'rgba(255,255,255,0.2)', transition: 'all 0.3s', transform: hovered === i ? 'translateX(6px)' : 'none' }}>→</span>
-          </motion.div>
-        ))}
-      </motion.div>
-    </Section>
-  )
-}
+// NOT: BÖLÜM 04 — SAYILAR artık ayrı bir bileşende: StatsCounterPro.jsx
+// (Framer'daki StatsCounterPro tasarımının uyarlaması). LandingPage içinde
+// <StatsCounterPro /> olarak render edilir.
 
-// ════════════════════════════════════════════════════════════════════════════
-// BÖLÜM 04 — SAYILAR
-// ════════════════════════════════════════════════════════════════════════════
-const STATS = [
-  { value: 3,   suffix: ' sn', label: 'ORTALAMA YANIT SÜRESİ' },
-  { value: 2,   suffix: '×',   label: 'HİBRİT ERİŞİM KATMANI' },
-  { value: 24,  suffix: '/7',  label: 'KESİNTİSİZ ERİŞİM'     },
-  { value: 100, suffix: '%',   label: 'KAYNAĞA DAYALI YANIT'  },
-]
+// NOT: BÖLÜM 05 — ÇÖZÜMLER / KULLANIM ALANLARI artık ayrı bir bileşende:
+// UseCasesMosaic.jsx (Framer'daki FeatureGridMosaic'in uyarlaması).
+// <UseCasesMosaic /> ile render edilir.
 
-function StatsSection() {
-  const ref    = useRef()
-  const inView = useInView(ref, { once: true, margin: '-15% 0px' })
-  return (
-    <div ref={ref} style={{ padding: '6rem 4rem', background: `linear-gradient(180deg, transparent 0%, ${GREEN}14 50%, transparent 100%)`, borderTop: `1px solid ${GREEN_L}1f`, borderBottom: `1px solid ${GREEN_L}1f` }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', maxWidth: '1100px', margin: '0 auto' }}>
-        {STATS.map((s, i) => (
-          <motion.div key={i} initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }} style={{ textAlign: 'center' }}>
-            <div style={{ fontFamily: F_ORBIT, fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', fontWeight: 900, lineHeight: 1, marginBottom: '0.6rem',
-              background: `linear-gradient(135deg, #fff 0%, ${GREEN_LL} 100%)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              <Counter end={s.value} suffix={s.suffix} isActive={inView} duration={1800 + i * 200} />
-            </div>
-            <p style={{ fontFamily: F_ORBIT, fontSize: '8px', letterSpacing: '0.35em', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase' }}>{s.label}</p>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  )
-}
+// NOT: BÖLÜM 06 — ÜRÜN GÖRÜNTÜLERİ artık ayrı bir bileşende: DepthGallery.jsx
+// (Framer'daki Depth Blur Carousel'in uyarlaması). <DepthGallery /> ile render edilir.
 
-// ════════════════════════════════════════════════════════════════════════════
-// BÖLÜM 05 — ÇÖZÜMLER / KULLANIM ALANLARI
-// ════════════════════════════════════════════════════════════════════════════
-const USE_CASES = [
-  { k: 'İK & ÖZLÜK',            d: 'Çalışanların izin, özlük ve prosedür sorularını anında yanıtlayın.' },
-  { k: 'HUKUK & UYUM',          d: 'Mevzuat ve uyum dokümanlarında kaynağa dayalı, izlenebilir yanıtlar.' },
-  { k: 'MÜŞTERİ HİZMETLERİ',    d: 'Temsilcilere onaylı bilgiyle hızlı, tutarlı destek sağlayın.' },
-  { k: 'TEKNİK DOKÜMANTASYON',  d: 'Kılavuz ve prosedürlerde saniyeler içinde doğru adıma ulaşın.' },
-  { k: 'EĞİTİM & ONBOARDING',   d: 'Yeni çalışanlar kurum bilgisine kendi kendine erişsin.' },
-  { k: 'BT & DESTEK',           d: 'Sık sorulan BT sorularını otomatik, onaylı yanıtlarla çözün.' },
-]
+// NOT: BÖLÜM 07 — NASIL ÇALIŞIR artık ayrı bir bileşende: ProcessShowcase.jsx
+// (Framer'daki CardShowcase'in uyarlaması). <ProcessShowcase /> ile render edilir.
 
-function UseCasesSection() {
-  return (
-    <Section style={{ borderTop: `1px solid ${GREEN_L}1f`, background: 'rgba(0,0,0,0.25)' }}>
-      <SectionLabel num="05" label="ÇÖZÜMLER" />
-      <motion.h2 variants={fadeUp} style={{ fontFamily: F_ORBIT, fontSize: 'clamp(1.8rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', textTransform: 'uppercase', marginBottom: '0.8rem', letterSpacing: '-0.01em' }}>KULLANIM ALANLARI</motion.h2>
-      <motion.p variants={fadeUp} style={{ fontFamily: F_SPACE, fontSize: '0.95rem', color: 'rgba(255,255,255,0.4)', maxWidth: '560px', lineHeight: 1.7, marginBottom: '3.5rem' }}>
-        Her departmanın bilgi yükünü tek bir akıllı asistana devredin. QABot, kurumun her köşesinde doğru bilgiyi hazır tutar.
-      </motion.p>
-      <motion.div variants={stagger(0.07)} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.2rem' }}>
-        {USE_CASES.map((u, i) => (
-          <motion.div key={i} variants={fadeUp} whileHover={{ y: -6, borderColor: `${GREEN_LL}66` }}
-            style={{ padding: '1.8rem', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(8,20,16,0.3)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '0.9rem' }}>
-              <span style={{ fontFamily: F_ORBIT, fontSize: '10px', color: GREEN_LL, letterSpacing: '0.2em' }}>{String(i + 1).padStart(2, '0')}</span>
-              <h3 style={{ fontFamily: F_ORBIT, fontSize: '0.9rem', fontWeight: 700, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{u.k}</h3>
-            </div>
-            <p style={{ fontFamily: F_SPACE, fontSize: '12.5px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>{u.d}</p>
-          </motion.div>
-        ))}
-      </motion.div>
-    </Section>
-  )
-}
-
-// ════════════════════════════════════════════════════════════════════════════
-// BÖLÜM 06 — ÜRÜN GÖRÜNTÜLERİ (arkadan öne büyüyen görsel ızgarası)
-// ════════════════════════════════════════════════════════════════════════════
-const SHOTS = [
-  { img: '/card_bg_4.png', title: 'SOHBET ARAYÜZÜ',           tag: 'CHATBOT', accent: GREEN_LL },
-  { img: '/card_bg_3.png', title: 'YÖNETİM PANELİ',           tag: 'ADMIN',   accent: GREEN_L  },
-  { img: '/card_bg_5.png', title: 'ANALİTİK & KPI',           tag: 'RAPOR',   accent: NAVY     },
-  { img: '/card_bg_2.png', title: 'KATEGORİ YÖNETİMİ',        tag: 'İÇERİK',  accent: MINT     },
-  { img: '/card_bg_1.png', title: 'ONAYLI YANIT AKIŞI',       tag: 'GÜVEN',   accent: MINT_L   },
-  { img: '/card_bg_6.png', title: 'KURUMSAL KİMLİK STÜDYOSU', tag: 'STÜDYO',  accent: GREEN_LL },
-]
-
-function ShotsSection() {
-  return (
-    <Section style={{ borderTop: `1px solid ${GREEN_L}1f` }}>
-      <SectionLabel num="06" label="ÜRÜNDEN" />
-      <motion.div variants={fadeUp} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
-        <h2 style={{ fontFamily: F_ORBIT, fontSize: 'clamp(1.8rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', textTransform: 'uppercase', letterSpacing: '-0.01em' }}>EKRAN GÖRÜNTÜLERİ</h2>
-        <span style={{ fontFamily: F_SPACE, fontSize: '11px', letterSpacing: '0.3em', color: GREEN_LL, textTransform: 'uppercase' }}>TÜMÜNÜ GÖR →</span>
-      </motion.div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.2rem' }}>
-        {SHOTS.map((s, i) => <GrowImage key={i} src={s.img} title={s.title} tag={s.tag} accent={s.accent} />)}
-      </div>
-    </Section>
-  )
-}
-
-// ════════════════════════════════════════════════════════════════════════════
-// BÖLÜM 07 — NASIL ÇALIŞIR
-// ════════════════════════════════════════════════════════════════════════════
-const STEPS = [
-  { num: '01', title: 'BELGE YÜKLEME',   desc: 'Mevzuat, politika ve rehber belgeleri sisteme yüklenir.' },
-  { num: '02', title: 'İNDEKSLEME',      desc: 'Belgeler otomatik taranıp vektör (ChromaDB) ve BM25 indekslerine dönüştürülür.' },
-  { num: '03', title: 'ANLAMSAL ERİŞİM', desc: 'Soru, hibrit retriever ile en ilgili bağlamı saniyeler içinde bulur.' },
-  { num: '04', title: 'ONAYLI YANIT',    desc: 'Kaynağa dayalı yanıt üretilir; denetlenenler "Onaylı" etiketiyle sunulur.' },
-]
-
-function ProcessSection() {
-  return (
-    <Section style={{ borderTop: `1px solid ${GREEN_L}1f`, background: 'rgba(0,0,0,0.3)' }}>
-      <SectionLabel num="07" label="SÜREÇ" />
-      <motion.h2 variants={fadeUp} style={{ fontFamily: F_ORBIT, fontSize: 'clamp(1.8rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', textTransform: 'uppercase', marginBottom: '5rem', letterSpacing: '-0.01em' }}>NASIL ÇALIŞIR</motion.h2>
-      <motion.div variants={stagger(0.1)} style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem' }}>
-        {STEPS.map((s, i) => (
-          <motion.div key={i} variants={fadeUp} style={{ position: 'relative' }}>
-            {i < STEPS.length - 1 && <div style={{ position: 'absolute', top: '1.5rem', left: 'calc(100% - 1rem)', right: '-1rem', height: '1px', background: `${GREEN_L}33`, zIndex: 0 }}/>}
-            <div style={{ width: '48px', height: '48px', borderRadius: '50%', border: `1px solid ${GREEN_L}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', position: 'relative', zIndex: 1, background: `${GREEN}22` }}>
-              <span style={{ fontFamily: F_ORBIT, fontSize: '9px', color: GREEN_LL, letterSpacing: '0.2em' }}>{s.num}</span>
-            </div>
-            <h3 style={{ fontFamily: F_ORBIT, fontSize: '1rem', fontWeight: 700, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.8rem' }}>{s.title}</h3>
-            <p style={{ fontFamily: F_SPACE, fontSize: '12px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.7 }}>{s.desc}</p>
-          </motion.div>
-        ))}
-      </motion.div>
-    </Section>
-  )
-}
-
-// ════════════════════════════════════════════════════════════════════════════
-// BÖLÜM 08 — TEKNOLOJİ (kayan şerit)
-// ════════════════════════════════════════════════════════════════════════════
-const TECH = ['REACT', 'PYTHON · FLASK', 'LANGCHAIN', 'CHROMADB', 'HUGGINGFACE', 'SQLALCHEMY', 'BM25', 'ENSEMBLE RETRIEVER']
-
-function TechSection() {
-  return (
-    <Section style={{ borderTop: `1px solid ${GREEN_L}1f`, paddingTop: '5rem', paddingBottom: '5rem' }}>
-      <SectionLabel num="08" label="TEKNOLOJİ" />
-      <motion.h2 variants={fadeUp} style={{ fontFamily: F_ORBIT, fontSize: 'clamp(1.4rem, 3vw, 2.4rem)', fontWeight: 900, color: '#fff', textTransform: 'uppercase', marginBottom: '2.5rem', letterSpacing: '-0.01em' }}>
-        GÜÇLÜ BİR MİMARİ ÜZERİNDE
-      </motion.h2>
-      <div style={{ overflow: 'hidden', maskImage: 'linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)' }}>
-        <div style={{ display: 'flex', gap: '2.5rem', whiteSpace: 'nowrap', animation: 'ticker 24s linear infinite' }}>
-          {Array(4).fill(TECH).flat().map((t, i) => (
-            <span key={i} style={{ fontFamily: F_ORBIT, fontSize: 'clamp(0.85rem, 1.5vw, 1.15rem)', fontWeight: 700, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.12em', display: 'inline-flex', alignItems: 'center', gap: '2.5rem' }}>
-              {t}<span style={{ color: GREEN_LL }}>◆</span>
-            </span>
-          ))}
-        </div>
-      </div>
-    </Section>
-  )
-}
+// NOT: BÖLÜM 08 — MİMARİ/TEKNOLOJİ artık ayrı bir bileşende: TechMarquee.jsx
+// (Framer'daki Logo Marquee X'in uyarlaması). <TechMarquee /> ile render edilir.
 
 // ════════════════════════════════════════════════════════════════════════════
 // BÖLÜM 09 — SSS (açılır akordeon, AnimatePresence)
@@ -478,7 +377,7 @@ function FaqSection() {
     <Section style={{ borderTop: `1px solid ${GREEN_L}1f` }}>
       <SectionLabel num="09" label="SSS" />
       <motion.h2 variants={fadeUp} style={{ fontFamily: F_ORBIT, fontSize: 'clamp(1.8rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', textTransform: 'uppercase', marginBottom: '3rem', letterSpacing: '-0.01em' }}>SIK SORULANLAR</motion.h2>
-      <motion.div variants={stagger(0.05)} style={{ maxWidth: '900px' }}>
+      <motion.div variants={stagger(0.05)} style={{ width: '100%' }}>
         {FAQS.map((f, i) => <FaqItem key={i} q={f.q} a={f.a} />)}
       </motion.div>
     </Section>
@@ -494,7 +393,7 @@ function ContactSection() {
   return (
     <Section style={{ minHeight: '90vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center',
       borderTop: `1px solid ${GREEN_L}1f`, background: `radial-gradient(ellipse 70% 60% at 50% 50%, ${GREEN}1f 0%, transparent 70%)` }}>
-      <SectionLabel num="10" label="BAŞLAYIN" />
+      <SectionLabel num="11" label="BAŞLAYIN" />
       <motion.h2 variants={fadeUp} style={{ fontFamily: F_ORBIT, fontSize: 'clamp(2rem, 6.2vw, 5.2rem)', fontWeight: 900, color: '#fff', textTransform: 'uppercase', lineHeight: 0.98, letterSpacing: '-0.02em', marginBottom: '2rem' }}>
         KURUMSAL BİLGİYE<br /><span style={{ WebkitTextStroke: `1px ${GREEN_LL}`, color: 'transparent' }}>AKILLI</span> ERİŞİMİ<br />BAŞLATIN
       </motion.h2>
@@ -645,14 +544,16 @@ export default function LandingPage({ onBack, enabled }) {
         <FeaturedSection scrollContainer={containerRef} />
         <Divider />
         <BenefitsSection />
-        <ServicesSection />
-        <StatsSection />
-        <UseCasesSection />
+        <Carousel3DFeatures />
+        <StatsCounterPro />
+        <MagicBentoStats />
+        <UseCasesMosaic />
         <Divider />
-        <ShotsSection />
-        <ProcessSection />
-        <TechSection />
+        <DepthGallery />
+        <ProcessShowcase />
+        <TechMarquee />
         <FaqSection />
+        <Pricing />
         <ContactSection />
         <FooterSection />
       </div>

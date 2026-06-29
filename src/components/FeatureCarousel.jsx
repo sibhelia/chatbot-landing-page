@@ -298,8 +298,8 @@ export default function FeatureCarousel({ onBack, onNext, enabled }) {
           Kart değişince içerik AnimatePresence ile yumuşakça yenilenir.
           Burası özelliği "satan" alandır: detay metni + öne çıkan maddeler. */}
       <div style={{
-        position: 'absolute', top: '50%', right: '3rem', transform: 'translateY(-50%)',
-        zIndex: 30, width: 'min(340px, 30vw)', pointerEvents: 'auto',
+        position: 'absolute', top: '63%', right: '8%', transform: 'translateY(-50%)',
+        zIndex: 30, width: 'min(560px, 34vw)', pointerEvents: 'auto',
       }}>
         <AnimatePresence mode="wait">
           <motion.div

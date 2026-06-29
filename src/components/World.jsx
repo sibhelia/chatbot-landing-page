@@ -17,6 +17,7 @@
 import { Canvas } from '@react-three/fiber'
 import * as THREE from 'three'
 import CameraRig from './CameraRig'
+import Starfield from './Starfield'
 import ParticleCloud from './ParticleCloud'
 import DnaHelix from './DnaHelix'
 import FountainBurst from './FountainBurst'
@@ -36,7 +37,10 @@ export default function World({ starColor, explosionRef, page, burst, onBurstDon
       <ambientLight intensity={1.3} />
       <CameraRig />
 
-      {/* Yıldızlar — her sayfada sürekli */}
+      {/* Üniform yıldız tabanı — ekranın HER YERİNİ (metin altları dahil) doldurur */}
+      <Starfield />
+
+      {/* Parçacık bulutu — hareketli derinlik/aksan katmanı */}
       <ParticleCloud targetColor={starColor} explosionRef={explosionRef} />
 
       {/* DNA sarmalı — galeri (carousel) sayfasında belirginleşir, diğer

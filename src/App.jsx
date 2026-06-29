@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
 import World from './components/World'
 import Overlay from './components/Overlay'
+import HeroCardFan from './components/HeroCardFan'
 import FeatureCarousel from './components/FeatureCarousel'
 import LandingPage from './components/LandingPage'
 import SideRail from './components/SideRail'
@@ -130,7 +131,16 @@ export default function App() {
             onNext={goNext}
           />
 
-
+          {/* Giriş sağ alanı: yazısız, otomatik açılan dekoratif kart yelpazesi.
+              Slayt boyunca sabit kalır; yalnızca soldaki metinler değişir.
+              Konum/boyut, giriş sağ bloğunu (büyük kare alan) dolduracak şekilde. */}
+          <div style={{
+            position: 'absolute', top: '50%', right: '5%', transform: 'translateY(-50%)',
+            width: 'clamp(420px, 44vw, 820px)', height: 'clamp(420px, 78vh, 780px)',
+            zIndex: 5, pointerEvents: 'none',
+          }}>
+            <HeroCardFan />
+          </div>
 
           <motion.div
             initial={{ opacity: 0, y: 6 }}
