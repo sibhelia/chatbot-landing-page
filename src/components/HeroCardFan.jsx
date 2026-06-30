@@ -21,17 +21,17 @@ const NAVY     = '#60a5fa'
 const MINT     = '#6ee7b7'
 
 const CARDS = [
-  { img: '/card_bg_4.png', accent: GREEN_LL },
-  { img: '/card_bg_3.png', accent: GREEN_L  },
-  { img: '/card_bg_5.png', accent: NAVY     },
-  { img: '/card_bg_2.png', accent: MINT     },
-  { img: '/card_bg_1.png', accent: GREEN_LL },
-  { img: '/card_bg_6.png', accent: GREEN_L  },
-  { img: '/card_bg_4.png', accent: MINT     },
+  { img: '/screens/screen-02.png', accent: GREEN_LL },
+  { img: '/screens/screen-04.png', accent: GREEN_L  },
+  { img: '/screens/screen-06.png', accent: NAVY     },
+  { img: '/screens/screen-07.png', accent: MINT     },
+  { img: '/screens/screen-08.png', accent: GREEN_LL },
+  { img: '/screens/screen-10.png', accent: GREEN_L  },
+  { img: '/screens/screen-15.png', accent: MINT     },
 ]
 
-const BASE_W = 210
-const BASE_H = 132
+const BASE_W = 240
+const BASE_H = 128
 const RADIUS = 14
 
 const getFinalRot = (i, total) => -60 + i * (360 / total)
@@ -49,10 +49,10 @@ function Card({ index, total, progress, img, accent }) {
     <motion.div style={{
       position: 'absolute', width: BASE_W, height: BASE_H, left: 0, bottom: 0,
       transformOrigin: 'left bottom', zIndex: total - index, borderRadius: RADIUS, overflow: 'hidden', rotate,
-      border: `1px solid ${accent}40`, boxShadow: `0 16px 40px rgba(0,0,0,0.55), 0 0 22px ${accent}1f`,
+      border: `1px solid ${accent}80`, boxShadow: `0 16px 40px rgba(0,0,0,0.6), 0 0 35px rgba(52, 211, 153, 0.6), 0 0 70px rgba(52, 211, 153, 0.3)`,
     }}>
-      <div style={{ position: 'absolute', inset: 0, backgroundImage: `url(${img})`, backgroundSize: 'cover', backgroundPosition: 'center' }}/>
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'linear-gradient(135deg, rgba(255,255,255,0.26) 0%, rgba(255,255,255,0.05) 42%, transparent 100%)' }}/>
+      <div style={{ position: 'absolute', inset: 0, backgroundImage: `url(${img})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center center', backgroundColor: '#f7fbfa' }}/>
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.03) 42%, transparent 100%)' }}/>
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: `linear-gradient(160deg, ${accent}18, transparent 60%)` }}/>
     </motion.div>
   )

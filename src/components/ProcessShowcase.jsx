@@ -27,10 +27,10 @@ const SPEED    = 5        // adım başına saniye
 const LOOP     = true
 
 const STEPS = [
-  { number: '01', title: 'BELGE YÜKLEME',   tag: 'GİRDİ',   description: 'Mevzuat, yönetmelik, politika ve rehber belgeleriniz sisteme yüklenir; kurumun dağınık bilgisi tek bir noktada toplanır. Hiyerarşik kategori yapısıyla içerikler düzenlenir, sürüm yönetimi sayesinde aynı belgenin eski ve yeni hâlleri birbirine karışmaz.', image: '/card_bg_3.png' },
-  { number: '02', title: 'İNDEKSLEME',      tag: 'İŞLEME',  description: 'Belgeler otomatik taranıp iki katmanda işlenir: çok dilli anlamsal vektör (ChromaDB) ve BM25 anahtar-kelime indeksi. Böylece sistem hem kelimelerin anlamını hem de tam eşleşmeleri yakalayacak biçimde, sorgulamaya hazır hâle gelir — manuel etiketleme gerektirmez.', image: '/card_bg_5.png' },
-  { number: '03', title: 'ANLAMSAL ERİŞİM', tag: 'ERİŞİM',  description: 'Kullanıcı sorusunu doğal dilde yazar; hibrit Ensemble Retriever en ilgili bağlamı saniyeler içinde getirir. Çok adımlı veya dolaylı sorularda ajan, geri aldığı kanıtı değerlendirip gerektiğinde aramayı yineler — yani cevaba ulaşana kadar akıl yürütür.', image: '/card_bg_4.png' },
-  { number: '04', title: 'ONAYLI YANIT',    tag: 'ÇIKTI',   description: 'Yanıt yalnızca bulunan kaynağa dayanarak üretilir; halüsinasyon önlenir. Yöneticinin onayladığı yanıtlar "Onaylı" rozetiyle sunulur ve gelecekte aynı soru sorulduğunda anlamsal atlama ile anında, daha da hızlı yanıtlanır.', image: '/card_bg_1.png' },
+  { number: '01', title: 'BELGE YÜKLEME',   tag: 'GİRDİ',   description: 'Mevzuat, yönetmelik, politika ve rehber belgeleriniz sisteme yüklenir; kurumun dağınık bilgisi tek bir noktada toplanır. Hiyerarşik kategori yapısıyla içerikler düzenlenir, sürüm yönetimi sayesinde aynı belgenin eski ve yeni hâlleri birbirine karışmaz.', image: '/screens/screen-15.png' },
+  { number: '02', title: 'İNDEKSLEME',      tag: 'İŞLEME',  description: 'Belgeler otomatik taranıp iki katmanda işlenir: çok dilli anlamsal vektör (ChromaDB) ve BM25 anahtar-kelime indeksi. Böylece sistem hem kelimelerin anlamını hem de tam eşleşmeleri yakalayacak biçimde, sorgulamaya hazır hâle gelir — manuel etiketleme gerektirmez.', image: '/screens/screen-01.png' },
+  { number: '03', title: 'ANLAMSAL ERİŞİM', tag: 'ERİŞİM',  description: 'Kullanıcı sorusunu doğal dilde yazar; hibrit Ensemble Retriever en ilgili bağlamı saniyeler içinde getirir. Çok adımlı veya dolaylı sorularda ajan, geri aldığı kanıtı değerlendirip gerektiğinde aramayı yineler — yani cevaba ulaşana kadar akıl yürütür.', image: '/screens/screen-03.png' },
+  { number: '04', title: 'ONAYLI YANIT',    tag: 'ÇIKTI',   description: 'Yanıt yalnızca bulunan kaynağa dayanarak üretilir; halüsinasyon önlenir. Yöneticinin onayladığı yanıtlar "Onaylı" rozetiyle sunulur ve gelecekte aynı soru sorulduğunda anlamsal atlama ile anında, daha da hızlı yanıtlanır.', image: '/screens/screen-09.png' },
 ]
 
 export default function ProcessShowcase() {
@@ -96,8 +96,8 @@ export default function ProcessShowcase() {
               <div style={{ fontFamily: F_ORBIT, fontSize: '36px', fontWeight: 900, color: GREEN_LL }}>{c.number}</div>
               <div style={{ fontFamily: F_ORBIT, fontSize: '20px', fontWeight: 700, color: '#fff', textTransform: 'uppercase' }}>{c.title}</div>
               <div style={{ fontFamily: F_SPACE, fontSize: '14px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>{c.description}</div>
-              <div style={{ width: '100%', aspectRatio: '16/10', overflow: 'hidden', borderRadius: '10px', border: `1px solid ${GREEN_L}33` }}>
-                <div style={{ width: '100%', height: '100%', backgroundImage: `url(${c.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}/>
+              <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', borderRadius: '10px', border: `1px solid ${GREEN_L}33` }}>
+                <div style={{ width: '100%', height: '100%', backgroundImage: `url(${c.image})`, backgroundSize: 'cover', backgroundPosition: 'top center' }}/>
               </div>
               <div style={{ fontFamily: F_ORBIT, fontSize: '10px', letterSpacing: '0.3em', color: GREEN_LL, textTransform: 'uppercase' }}>{c.tag}</div>
             </div>
@@ -111,12 +111,12 @@ export default function ProcessShowcase() {
   return (
     <section style={{ padding: '6rem 4rem', borderTop: `1px solid ${GREEN_L}1f` }}>
       {Header}
-      <div style={{ display: 'flex', gap: '18px', width: '100%', minHeight: '440px', alignItems: 'stretch' }}>
+      <div style={{ display: 'flex', gap: '18px', width: '100%', minHeight: '380px', alignItems: 'stretch' }}>
         {STEPS.map((c, i) => {
           const isActive = i === activeIndex
           return (
             <motion.div key={i} onClick={() => onCard(i)}
-              animate={{ flex: isActive ? 2.4 : 1 }} transition={{ duration: 0.5, ease: 'easeInOut' }}
+              animate={{ flex: isActive ? 4.5 : 1 }} transition={{ duration: 0.5, ease: 'easeInOut' }}
               style={{
                 position: 'relative', padding: '24px 24px 24px 30px', cursor: 'pointer', overflow: 'hidden',
                 display: 'flex', flexDirection: 'column', gap: '16px', minHeight: 0, borderRadius: '14px',
@@ -145,8 +145,8 @@ export default function ProcessShowcase() {
                     style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'space-between', minHeight: 0, gap: '16px' }}>
                     <p style={{ fontFamily: F_SPACE, fontSize: '14px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.55, margin: 0 }}>{c.description}</p>
                     <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 0 }}>
-                      <div style={{ width: '100%', aspectRatio: '16/10', overflow: 'hidden', borderRadius: '10px', border: `1px solid ${GREEN_L}33`, boxShadow: `0 20px 50px rgba(0,0,0,0.5)` }}>
-                        <div style={{ width: '100%', height: '100%', backgroundImage: `url(${c.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}/>
+                      <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', borderRadius: '10px', border: `1px solid ${GREEN_L}33`, boxShadow: `0 20px 50px rgba(0,0,0,0.5)` }}>
+                        <div style={{ width: '100%', height: '100%', backgroundImage: `url(${c.image})`, backgroundSize: 'cover', backgroundPosition: 'top center' }}/>
                       </div>
                     </div>
                     <div style={{ fontFamily: F_ORBIT, fontSize: '10px', letterSpacing: '0.3em', color: GREEN_LL, textTransform: 'uppercase', alignSelf: 'flex-start' }}>{c.tag}</div>

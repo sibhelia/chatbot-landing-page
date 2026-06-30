@@ -17,7 +17,7 @@
  * ════════════════════════════════════════════════════════════════════════════
  */
 import { useEffect, useRef, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion'
 
 const F_ORBIT = 'Orbitron, sans-serif'
 
@@ -45,7 +45,7 @@ function Icon({ name, color, size = 26 }) {
 // ─── QABot rakamları ──────────────────────────────────────────────────────────
 const STATS = [
   { value: 3,   decimals: 0, suffix: ' sn', label: 'ORTALAMA YANIT SÜRESİ', icon: 'zap',   accent: GREEN_LL },
-  { value: 2,   decimals: 0, suffix: '×',   label: 'HİBRİT ERİŞİM KATMANI', icon: 'globe', accent: GREEN_L  },
+  { value: 2,   decimals: 0, suffix: 'x',   label: 'HİBRİT ERİŞİM KATMANI', icon: 'globe', accent: GREEN_L  },
   { value: 24,  decimals: 0, suffix: '/7',  label: 'KESİNTİSİZ ERİŞİM',     icon: 'check', accent: MINT     },
   { value: 100, decimals: 0, suffix: '%',   label: 'KAYNAĞA DAYALI YANIT',  icon: 'award', accent: NAVY     },
 ]
@@ -57,27 +57,31 @@ const STAGGER  = 160    // öğeler arası gecikme (ms)
 const expoOut = (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t))
 
 function StatItem({ s, i, inView }) {
-  const [val, setVal]       = useState(0)
   const [hovered, setHover] = useState(false)
+  const count = useMotionValue(0)
+
+  const display = useTransform(count, (latest) => {
+    if (latest >= s.value * 0.999) {
+      return s.decimals ? s.value.toFixed(s.decimals) : Math.round(s.value)
+    }
+    // Küçük sayılarda animasyon sırasında daha hareketli durması için 1 ondalık göster
+    if (s.value <= 5) return latest.toFixed(1)
+    return Math.round(latest)
+  })
 
   // Görünür olunca sıfırdan hedefe say
   useEffect(() => {
-    if (!inView) { setVal(0); return }
-    const start = performance.now() + i * STAGGER
-    let raf
-    const tick = (now) => {
-      const el = now - start
-      if (el < 0) { raf = requestAnimationFrame(tick); return }
-      const p = Math.min(el / DURATION, 1)
-      setVal(s.value * expoOut(p))
-      if (p < 1) raf = requestAnimationFrame(tick)
-      else setVal(s.value)
+    if (inView) {
+      const controls = animate(count, s.value, {
+        duration: 1.8,
+        delay: i * 0.15,
+        ease: "easeOut"
+      })
+      return () => controls.stop()
+    } else {
+      count.set(0)
     }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [inView, s.value, i])
-
-  const shown = s.decimals ? val.toFixed(s.decimals) : Math.round(val)
+  }, [inView, s.value, i, count])
 
   return (
     <motion.div
@@ -102,8 +106,10 @@ function StatItem({ s, i, inView }) {
         background: `linear-gradient(135deg, #ffffff 0%, ${s.accent} 100%)`,
         WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent', color: 'transparent',
         textShadow: hovered ? `0 0 34px ${s.accent}77` : `0 0 18px ${s.accent}3a`, transition: 'text-shadow 0.3s ease',
+        display: 'flex', alignItems: 'baseline', justifyContent: 'center'
       }}>
-        {shown}{s.suffix}
+        <motion.span>{display}</motion.span>
+        <span>{s.suffix}</span>
       </div>
 
       {/* Etiket */}

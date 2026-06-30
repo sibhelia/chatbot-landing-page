@@ -27,7 +27,7 @@ const CAM_FOV         = 66
 const HURRICANE_SCALE = 0.7    // DNA sarmalının boyu/büyüklüğü
 const HURRICANE_POS   = [0, 0, -1.2]
 
-export default function World({ starColor, explosionRef, page, burst, onBurstDone }) {
+export default function World({ starColor, explosionRef, page, burst, burstKey, onBurstDone }) {
   return (
     <Canvas
       style={{ position: 'absolute', inset: 0, background: '#000000', pointerEvents: 'none' }}
@@ -50,7 +50,7 @@ export default function World({ starColor, explosionRef, page, burst, onBurstDon
       </group>
 
       {/* Fıskiye patlaması — sadece geçişte mount olur, hurricane'den fışkırır */}
-      {burst && <FountainBurst onDone={onBurstDone} />}
+      {burst && <FountainBurst key={burstKey} onDone={onBurstDone} />}
     </Canvas>
   )
 }

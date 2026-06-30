@@ -23,9 +23,9 @@ import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
-const POINTS       = 56000   // toplam parçacık
+const POINTS       = 40000   // toplam parçacık
 const STRANDS      = 4       // sarmal şerit sayısı
-const RUNG_FRAC    = 0.16    // merdiven (basamak) parçacık oranı
+const RUNG_FRAC    = 0.08    // merdiven (basamak) parçacık oranı
 const HELIX_HEIGHT = 3.6     // dikey yarı-uzunluk (toplam boy = 2×)
 const HELIX_RADIUS = 1.7     // eksenden uzaklık
 
@@ -47,7 +47,7 @@ const vert = /* glsl */ `
   varying   float vAlpha;
 
   const float VH    = ${HELIX_HEIGHT.toFixed(2)};
-  const float TWIST = 1.55;   // sarılma sıkılığı (birim boyda tur sayısı)
+  const float TWIST = 1.05;   // sarılma sıkılığı (birim boyda tur sayısı)
   const float FLOW  = 0.50;   // yukarı akış hızı
   const float ROT   = 0.22;   // tüm yapının yavaş dönüşü
 
@@ -108,10 +108,10 @@ export default function DnaHelix({ active = false }) {
       h = (Math.random() * 2 - 1) * HELIX_HEIGHT
 
       if (!isRung) {
-        // Şerit noktası: belirli bir şeride ait, sabit yarıçaplı
+        // Şerit noktası: belirli bir şeride ait, artırılmış dağınıklık (jitter)
         const s = i % STRANDS
-        phase0  = s * (TWO_PI / STRANDS) + (Math.random() * 2 - 1) * 0.05
-        radius  = HELIX_RADIUS + (Math.random() * 2 - 1) * 0.13
+        phase0  = s * (TWO_PI / STRANDS) + (Math.random() * 2 - 1) * 0.25
+        radius  = HELIX_RADIUS + (Math.random() * 2 - 1) * 0.45
         c       = STRAND_COLORS[s]
         size    = 2.0 + Math.random() * 3.2
       } else {

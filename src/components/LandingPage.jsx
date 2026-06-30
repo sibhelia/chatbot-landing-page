@@ -169,19 +169,19 @@ function ManifestoSection() {
       <SectionLabel num="01" label="MANİFESTO" />
       <motion.h2 variants={fadeUp} style={{
         fontFamily: F_ORBIT, fontWeight: 900, fontSize: 'clamp(2.3rem, 6.2vw, 6.2rem)', lineHeight: 0.98,
-        letterSpacing: '-0.02em', color: '#fff', textTransform: 'uppercase', maxWidth: '1000px', marginBottom: '3rem' }}>
+        letterSpacing: '-0.02em', color: '#fff', textTransform: 'uppercase', width: '100%', marginBottom: '3rem' }}>
         KURUMSAL BİLGİYİ<br />
-        <span style={{ WebkitTextStroke: `1px ${GREEN_LL}`, color: 'transparent' }}>AKILLI</span> YANITA<br />
+        <span style={{ color: GREEN_LL }}>AKILLI</span> YANITA<br />
         DÖNÜŞTÜRÜYORUZ
       </motion.h2>
-      <motion.div variants={fadeUp} style={{ display: 'flex', gap: '4rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-        <p style={{ fontFamily: F_SPACE, fontSize: 'clamp(0.9rem, 1.4vw, 1.1rem)', color: 'rgba(255,255,255,0.55)', lineHeight: 1.8, maxWidth: '470px' }}>
+      <motion.div variants={fadeUp} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '3rem', width: '100%' }}>
+        <p style={{ fontFamily: F_SPACE, fontSize: 'clamp(0.9rem, 1.4vw, 1.1rem)', color: 'rgba(255,255,255,0.55)', lineHeight: 1.8, margin: 0 }}>
           QABot; kurumunuzun mevzuat, politika ve rehber belgelerini anlamsal olarak analiz eden ajan tabanlı (agentic)
           bir RAG platformudur. Çalışanların aradığı bilgiye saniyeler içinde — kaynağa dayalı, doğru ve denetlenebilir
           yanıtlarla — ulaşmasını sağlar. Tek atışlı aramanın ötesine geçer; gerektiğinde sorguyu yeniden değerlendirip
           en doğru bağlamı bulana kadar akıl yürütür.
         </p>
-        <p style={{ fontFamily: F_SPACE, fontSize: 'clamp(0.9rem, 1.4vw, 1.1rem)', color: 'rgba(255,255,255,0.35)', lineHeight: 1.8, maxWidth: '420px' }}>
+        <p style={{ fontFamily: F_SPACE, fontSize: 'clamp(0.9rem, 1.4vw, 1.1rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, margin: 0 }}>
           Devasa belge yığınlarını gezilebilir, yönetilebilir bilgi bankalarına dönüştürür; kullanıcı deneyimini ön
           planda tutan modern bir sohbet arayüzü ve kod gerektirmeyen kapsamlı bir yönetim paneli sunar. Çok kiracılı
           mimarisiyle farklı kurum ve departmanlar, kendi verileriyle güvenle çalışır.
@@ -206,27 +206,42 @@ function FeaturedSection({ scrollContainer }) {
   const inView = useInView(ref, { once: true, margin: '-15% 0px' })
   // Görsel, sayfa kaydıkça hafifçe yukarı süzülür (parallax derinlik hissi)
   const { scrollYProgress } = useScroll({ container: scrollContainer, target: ref, offset: ['start end', 'end start'] })
-  const imgY = useTransform(scrollYProgress, [0, 1], ['-8%', '8%'])
+  const imgY = useTransform(scrollYProgress, [0, 1], [0, -30])
 
   return (
-    <div ref={ref} style={{ padding: '4rem 4rem 6rem', position: 'relative' }}>
+    <div ref={ref} style={{ padding: '2rem 4rem 6rem', position: 'relative' }}>
       <motion.div
-        initial={{ opacity: 0, scale: 0.42, y: 60, filter: 'blur(8px)' }}
+        initial={{ opacity: 0, scale: 0.9, y: 40, filter: 'blur(4px)' }}
         animate={inView ? { opacity: 1, scale: 1, y: 0, filter: 'blur(0px)' } : {}}
         transition={{ type: 'spring', stiffness: 60, damping: 16, mass: 1 }}
-        style={{ position: 'relative', maxWidth: '1100px', margin: '0 auto', aspectRatio: '16 / 8.5',
-          borderRadius: '12px', overflow: 'hidden', border: `1px solid ${GREEN_L}33`,
-          boxShadow: `0 40px 120px rgba(0,0,0,0.6), 0 0 60px ${GREEN}30` }}>
-        {/* Parallax görsel katmanı → ürün ana ekran görüntüsüyle değiştir */}
-        <motion.div style={{ position: 'absolute', inset: '-8% 0', backgroundImage: 'url(/card_bg_3.png)', backgroundSize: 'cover', backgroundPosition: 'center', y: imgY }}/>
-        <div style={{ position: 'absolute', inset: 0,
-          background: 'linear-gradient(120deg, rgba(2,12,12,0.55) 0%, transparent 45%), linear-gradient(to top, rgba(2,12,12,0.85), transparent 60%)' }}/>
-        <div style={{ position: 'absolute', bottom: '1.8rem', left: '2rem', right: '2rem' }}>
-          <p style={{ fontFamily: F_ORBIT, fontSize: '8px', letterSpacing: '0.5em', color: GREEN_LL, textTransform: 'uppercase', marginBottom: '8px' }}>ÜRÜN ARAYÜZÜ</p>
-          <h3 style={{ fontFamily: F_ORBIT, fontWeight: 900, fontSize: 'clamp(1.1rem, 2.4vw, 2rem)', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.02em', marginBottom: '0.7rem' }}>
+        style={{
+          position: 'relative', width: '100%', maxWidth: '1000px', margin: '0 auto',
+          display: 'flex', flexDirection: 'column', gap: '2rem'
+        }}>
+        
+        {/* Ürün Ekranı Görseli */}
+        <motion.div style={{
+          position: 'relative', width: '100%',
+          borderRadius: '12px', overflow: 'hidden', border: `1px solid ${GREEN_L}80`,
+          boxShadow: `0 20px 50px rgba(0,0,0,0.8), 0 0 60px ${GREEN_LL}70, 0 0 120px ${GREEN_LL}40`,
+          y: imgY
+        }}>
+          <img src="/screens/screen-09.png" alt="QABot Interface" style={{ width: '100%', height: 'auto', display: 'block' }} />
+          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none',
+            background: 'linear-gradient(to top, rgba(2,12,12,0.6) 0%, transparent 20%)' }}/>
+        </motion.div>
+
+        {/* Metin Alanı (Transparan) */}
+        <div style={{
+          position: 'relative', zIndex: 2, padding: '0.5rem 1rem',
+          background: 'transparent', color: '#fff',
+          display: 'flex', flexDirection: 'column', gap: '0.8rem', textAlign: 'center', alignItems: 'center'
+        }}>
+          <p style={{ fontFamily: F_ORBIT, fontSize: '9px', letterSpacing: '0.5em', color: GREEN_LL, textTransform: 'uppercase', margin: 0 }}>ÜRÜN ARAYÜZÜ</p>
+          <h3 style={{ fontFamily: F_ORBIT, fontWeight: 900, fontSize: 'clamp(1rem, 2vw, 1.7rem)', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.02em', margin: 0 }}>
             AKILLI SOHBET & ONAYLI YANIT DENEYİMİ
           </h3>
-          <p style={{ fontFamily: F_SPACE, fontSize: 'clamp(0.85rem, 1.1vw, 1rem)', color: 'rgba(255,255,255,0.6)', lineHeight: 1.65, maxWidth: '620px' }}>
+          <p style={{ fontFamily: F_SPACE, fontSize: 'clamp(0.85rem, 1.1vw, 1rem)', color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, maxWidth: '840px', margin: 0 }}>
             Çalışan sorusunu doğal dilde yazar; QABot ilgili belgeyi bulur, kaynağa dayalı yanıtı üretir ve yöneticinin
             onayladığı yanıtları "Onaylı" rozetiyle sunar. Sade, hızlı ve güven veren bir sohbet deneyimi — tam da
             kurumunuzun bilgi birikimiyle konuşuyormuş gibi.
@@ -237,8 +252,7 @@ function FeaturedSection({ scrollContainer }) {
   )
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// BÖLÜM 02 — NEDEN QABOT (faydalar)
+// BÖLÜM 02 — NEDEN QABOT (faydalar)'
 // ════════════════════════════════════════════════════════════════════════════
 const BENEFITS = [
   { icon: '⚡', stat: 3,   suffix: 'sn',  title: 'SANİYELER İÇİNDE YANIT', desc: 'Onlarca sayfalık yönetmelik ve prosedür arasında kaybolmak yok. QABot, sorunun amacını anlayıp ilgili paragrafı saniyeler içinde önünüze getirir; çalışanlarınız beklemeden, doğru bilgiyle işine devam eder.', accent: GREEN_LL },
@@ -319,7 +333,7 @@ function BenefitsSection() {
       <motion.h2 variants={fadeUp} style={{ fontFamily: F_ORBIT, fontSize: 'clamp(1.8rem, 4vw, 3.4rem)', fontWeight: 900, color: '#fff', textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
         KURUMSAL BİLGİDE FARK
       </motion.h2>
-      <motion.p variants={fadeUp} style={{ fontFamily: F_SPACE, fontSize: 'clamp(0.95rem, 1.3vw, 1.1rem)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.8, maxWidth: '760px', marginBottom: '3.5rem' }}>
+      <motion.p variants={fadeUp} style={{ fontFamily: F_SPACE, fontSize: 'clamp(0.95rem, 1.3vw, 1.1rem)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.8, width: '100%', marginBottom: '3.5rem' }}>
         Kurumlarda en değerli bilgi çoğu zaman PDF'lerin, yönetmeliklerin ve eski e-postaların içinde kilitli kalır.
         Çalışanlar aradıklarını bulamaz, aynı sorular defalarca sorulur, doğru cevap kişiden kişiye değişir. QABot bu
         döngüyü kırar: dağınık kurumsal bilgiyi, herkesin güvenebileceği tek ve akıllı bir yanıt kaynağına dönüştürür.

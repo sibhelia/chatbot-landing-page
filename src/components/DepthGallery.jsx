@@ -26,12 +26,12 @@ const NAVY     = '#60a5fa'
 
 // Galeri öğeleri (ürün ekran görüntüleri) — döngü için tekrarlanır
 const SHOTS = [
-  { img: '/card_bg_4.png', title: 'SOHBET ARAYÜZÜ',           tag: 'CHATBOT', accent: GREEN_LL },
-  { img: '/card_bg_3.png', title: 'YÖNETİM PANELİ',           tag: 'ADMIN',   accent: GREEN_L  },
-  { img: '/card_bg_5.png', title: 'ANALİTİK & KPI',           tag: 'RAPOR',   accent: NAVY     },
-  { img: '/card_bg_2.png', title: 'KATEGORİ YÖNETİMİ',        tag: 'İÇERİK',  accent: MINT     },
-  { img: '/card_bg_1.png', title: 'ONAYLI YANIT AKIŞI',       tag: 'GÜVEN',   accent: MINT_L   },
-  { img: '/card_bg_6.png', title: 'KURUMSAL KİMLİK STÜDYOSU', tag: 'STÜDYO',  accent: GREEN_LL },
+  { img: '/screens/screen-01.png', title: 'SORGU & DİYALOG ANALİTİĞİ', tag: 'ANALİZ'  , accent: GREEN_LL },
+  { img: '/screens/screen-03.png', title: 'GERİ BİLDİRİM YÖNETİMİ',    tag: 'GERİ BİLDİRİM', accent: GREEN_L  },
+  { img: '/screens/screen-05.png', title: 'VERİ & BİLGİ YÖNETİMİ',     tag: 'VERİ',          accent: NAVY     },
+  { img: '/screens/screen-11.png', title: 'SİSTEM LOGLARI',             tag: 'LOG',           accent: MINT     },
+  { img: '/screens/screen-12.png', title: 'SİSTEM AYARLARI',            tag: 'AYAR',          accent: MINT_L   },
+  { img: '/screens/screen-14.png', title: 'KREDİ & KULLANIM YÖNETİMİ',  tag: 'KREDİ',         accent: GREEN_LL },
 ]
 
 // ── Enine geniş kart ölçüleri ─────────────────────────────────────────────────

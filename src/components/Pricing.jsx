@@ -58,7 +58,7 @@ function PlanCard({ p, i, inView }) {
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       style={{
         position: 'relative', display: 'flex', flexDirection: 'column',
-        padding: '2.4rem 2rem', borderRadius: '16px',
+        padding: '3rem 2.4rem', borderRadius: '16px',
         border: `1px solid ${hovered || p.popular ? GREEN_LL + '66' : accentBorder}`,
         background: p.popular ? 'rgba(4,120,87,0.12)' : 'rgba(8,20,16,0.4)',
         boxShadow: p.popular ? `0 30px 80px rgba(0,0,0,0.5), 0 0 50px ${GREEN}33` : (hovered ? `0 24px 60px rgba(0,0,0,0.45)` : '0 10px 30px rgba(0,0,0,0.3)'),
@@ -72,10 +72,10 @@ function PlanCard({ p, i, inView }) {
         </div>
       )}
 
-      <span style={{ fontFamily: F_ORBIT, fontSize: '11px', fontWeight: 700, letterSpacing: '0.2em', color: '#fff', textTransform: 'uppercase' }}>{p.name}</span>
-      <span style={{ fontFamily: F_SPACE, fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '6px' }}>{p.note}</span>
+      <span style={{ fontFamily: F_ORBIT, fontSize: '14px', fontWeight: 700, letterSpacing: '0.2em', color: '#fff', textTransform: 'uppercase' }}>{p.name}</span>
+      <span style={{ fontFamily: F_SPACE, fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginTop: '6px' }}>{p.note}</span>
 
-      <div style={{ margin: '1.6rem 0', fontFamily: F_ORBIT, fontWeight: 900, fontSize: '2rem', lineHeight: 1,
+      <div style={{ margin: '1.6rem 0', fontFamily: F_ORBIT, fontWeight: 900, fontSize: '2.8rem', lineHeight: 1,
         background: `linear-gradient(135deg, #fff, ${GREEN_LL})`, WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent', color: 'transparent' }}>
         {p.price}
       </div>
@@ -83,16 +83,16 @@ function PlanCard({ p, i, inView }) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '11px', marginBottom: '2rem', flex: 1 }}>
         {p.features.map((f, k) => (
           <div key={k} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-            <span style={{ color: GREEN_LL, fontSize: '13px', lineHeight: 1.5, flexShrink: 0 }}>✓</span>
-            <span style={{ fontFamily: F_SPACE, fontSize: '12.5px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>{f}</span>
+            <span style={{ color: GREEN_LL, fontSize: '15px', lineHeight: 1.5, flexShrink: 0 }}>✓</span>
+            <span style={{ fontFamily: F_SPACE, fontSize: '15px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>{f}</span>
           </div>
         ))}
       </div>
 
       <button
         style={{
-          width: '100%', padding: '0.9rem', borderRadius: '6px', cursor: 'pointer',
-          fontFamily: F_ORBIT, fontSize: '10px', letterSpacing: '0.25em', textTransform: 'uppercase',
+          width: '100%', padding: '1.2rem', borderRadius: '8px', cursor: 'pointer',
+          fontFamily: F_ORBIT, fontSize: '12px', letterSpacing: '0.25em', textTransform: 'uppercase',
           border: p.popular ? 'none' : `1px solid ${GREEN_L}55`,
           background: p.popular ? GREEN : 'transparent',
           color: p.popular ? '#fff' : GREEN_LL, transition: 'all 0.25s',
@@ -126,7 +126,7 @@ export default function Pricing() {
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.6rem', maxWidth: '1080px', margin: '0 auto', alignItems: 'stretch' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem', maxWidth: '1200px', margin: '0 auto', alignItems: 'stretch' }}>
         {PLANS.map((p, i) => <PlanCard key={i} p={p} i={i} inView={inView} />)}
       </div>
 

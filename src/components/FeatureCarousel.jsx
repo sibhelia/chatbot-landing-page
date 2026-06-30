@@ -44,7 +44,7 @@ const CARDS = [
     subtitle: 'VEKTÖR + BM25 ENSEMBLE RETRIEVER',
     detail:   'Anlamsal vektör araması (ChromaDB) ile anahtar-kelime hassasiyetini (BM25) birleştirir. Hem "ne kastedildiğini" hem "tam olarak ne yazıldığını" yakalar — kaçırılan cevap kalmaz.',
     points:   ['ChromaDB vektör veritabanı', 'BM25 anahtar-kelime motoru', 'Ensemble Retriever birleşimi'],
-    bg:       '/card_bg_4.png',
+    bg:       '/screens/screen-08.png',
     accent:   '#34d399',
   },
   {
@@ -55,7 +55,7 @@ const CARDS = [
     subtitle: 'DENETLENEN, DOĞRULANMIŞ BİLGİ',
     detail:   'Yöneticinin onayladığı her yanıt "Onaylı" rozetiyle sunulur. Kullanıcı, gördüğü bilginin kurumca doğrulandığını anında bilir; bilgi kirliliği ve yanlış yönlendirme ortadan kalkar.',
     points:   ['Yönetici onay akışı', '"Onaylı" güven rozeti', 'Kaynağa dayalı yanıt'],
-    bg:       '/card_bg_1.png',
+    bg:       '/screens/screen-09.png',
     accent:   '#10b981',
   },
   {
@@ -66,7 +66,7 @@ const CARDS = [
     subtitle: 'KOD YAZMADAN TAM KONTROL',
     detail:   'Marka logosu, başlıklar, kategoriler ve içerikler stüdyo modülünden tek satır kod yazmadan güncellenir. Sistem tamamen sizin kontrolünüzde, kurumsal kimliğinize göre şekillenir.',
     points:   ['Stüdyo ile kurumsal kimlik', 'Kategori & içerik yönetimi', 'Kod gerektirmez'],
-    bg:       '/card_bg_3.png',
+    bg:       '/screens/screen-02.png',
     accent:   '#6ee7b7',
   },
   {
@@ -77,7 +77,7 @@ const CARDS = [
     subtitle: 'SINIRSIZ KIRILIMLI BİLGİ YAPISI',
     detail:   'Mevzuat ve bilgi bankası içerikleri, sınırsız derinlikte ebeveyn-çocuk kategori yapısıyla düzenlenir. Devasa belge yığınları, gezilebilir ve yönetilebilir bir bilgi mimarisine dönüşür.',
     points:   ['Sınırsız alt kategori', 'Ebeveyn-çocuk yapısı', 'Düzenli bilgi mimarisi'],
-    bg:       '/card_bg_2.png',
+    bg:       '/screens/screen-05.png',
     accent:   '#a7f3d0',
   },
   {
@@ -88,7 +88,7 @@ const CARDS = [
     subtitle: 'VERİYLE YÖNETİLEN KARARLAR',
     detail:   'Kullanım istatistikleri, kredi tüketimi, en çok merak edilen kategoriler ve yanıt hızı görselleştirilmiş raporlarla sunulur. Kurumunuzun bilgi nabzını tek ekrandan tutarsınız.',
     points:   ['Kullanım & kredi raporları', 'Popüler kategori analizi', 'Yanıt hızı metrikleri'],
-    bg:       '/card_bg_5.png',
+    bg:       '/screens/screen-06.png',
     accent:   '#60a5fa',
   },
   {
@@ -99,7 +99,7 @@ const CARDS = [
     subtitle: 'SÜREKLİ İYİLEŞEN ZEKA',
     detail:   'Kullanıcı düzeltme talepleri anlık izlenir; yöneticiler manuel müdahalelerle yapay zekanın öğrenmesini yönlendirir. QABot her etkileşimde daha doğru, daha kurumsal hâle gelir.',
     points:   ['Anlık geri bildirim akışı', 'Manuel iyileştirme', 'Kendini geliştiren AI'],
-    bg:       '/card_bg_6.png',
+    bg:       '/screens/screen-03.png',
     accent:   '#34d399',
   },
 ]
@@ -112,11 +112,11 @@ const STEP_DEG   = 360 / CARD_COUNT   // her kart arası açı (60°)
 // STEP_Y : kartlar arası dikey düşüş (sarmal adımı)
 // PERSP  : CSS perspective (büyük = az distorsiyon)
 // CARD_W / CARD_H : kart ölçüleri
-const RADIUS = 680
-const STEP_Y = 260
-const PERSP  = 1000
-const CARD_W = 580
-const CARD_H = 390
+const RADIUS = 720
+const STEP_Y = 320
+const PERSP  = 1100
+const CARD_W = 768
+const CARD_H = 432
 
 const F_ORBIT = 'Orbitron, sans-serif'
 const F_SPACE = 'Space Grotesk, sans-serif'
@@ -180,7 +180,7 @@ export default function FeatureCarousel({ onBack, onNext, enabled }) {
       {/* ── 3B HELIX KART SARMALI ───────────────────────────────────────────── */}
       <div style={{ position: 'absolute', inset: 0, perspective: `${PERSP}px`, perspectiveOrigin: '50% 50%', pointerEvents: 'none' }}>
         <div style={{
-          position: 'absolute', top: '50%', left: '50%', width: 0, height: 0,
+          position: 'absolute', top: '50%', left: '42%', width: 0, height: 0,
           transformStyle: 'preserve-3d', transform: carouselTransform,
           transition: 'transform 0.88s cubic-bezier(0.22, 1, 0.36, 1)',
         }}>
@@ -205,7 +205,7 @@ export default function FeatureCarousel({ onBack, onNext, enabled }) {
                 opacity: visible ? (isActive ? 1 : 0.40) : 0,
                 transition: 'opacity 0.5s ease',
                 boxShadow: isActive
-                  ? `0 0 50px 12px ${c.accent}30, 0 0 100px 30px ${c.accent}15, inset 0 0 0 1px ${c.accent}28`
+                  ? `0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(52, 211, 153, 0.5), 0 0 80px rgba(52, 211, 153, 0.25), inset 0 0 0 1px ${c.accent}40`
                   : 'none',
                 willChange: 'transform, opacity', overflow: 'hidden',
               }}>

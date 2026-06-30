@@ -30,17 +30,17 @@ const NAVY     = '#60a5fa'
 
 // ─── Kartlar (QABot özellikleri) ──────────────────────────────────────────────
 const CARDS = [
-  { tag: 'AKILLI ARAMA',  label: 'HİBRİT ERİŞİM',          sub: 'Vektör araması + BM25 — Ensemble Retriever',  img: '/card_bg_4.png', accent: GREEN_LL },
-  { tag: 'GÜVENİLİRLİK',  label: 'ONAYLI YANIT',           sub: 'Denetlenen, kaynağa dayalı, doğrulanmış bilgi', img: '/card_bg_1.png', accent: GREEN_L  },
-  { tag: 'KONTROL',       label: 'YÖNETİM PANELİ',         sub: 'Kod yazmadan tam kontrol, stüdyo modülü',       img: '/card_bg_3.png', accent: MINT     },
-  { tag: 'ORGANİZASYON',  label: 'HİYERARŞİK KATEGORİLER', sub: 'Sınırsız kırılımlı bilgi mimarisi',             img: '/card_bg_2.png', accent: MINT_L   },
-  { tag: 'İÇGÖRÜ',        label: 'ANALİTİK & KPI',         sub: 'Veriyle yönetilen kararlar, görsel raporlar',   img: '/card_bg_5.png', accent: NAVY     },
-  { tag: 'ÖĞRENME',       label: 'GERİ BİLDİRİM & ÖĞRENME',sub: 'Geri bildirimle sürekli iyileşen zekâ',         img: '/card_bg_6.png', accent: GREEN_LL },
+  { tag: 'AKILLI ARAMA',  label: 'HİBRİT ERİŞİM',          sub: 'Vektör araması + BM25 — Ensemble Retriever',  img: '/screens/screen-08.png', accent: GREEN_LL },
+  { tag: 'GÜVENİLİRLİK',  label: 'ONAYLI YANIT',           sub: 'Denetlenen, kaynağa dayalı, doğrulanmış bilgi', img: '/screens/screen-09.png', accent: GREEN_L  },
+  { tag: 'KONTROL',       label: 'YÖNETİM PANELİ',         sub: 'Kod yazmadan tam kontrol, stüdyo modülü',       img: '/screens/screen-02.png', accent: MINT     },
+  { tag: 'ORGANİZASYON',  label: 'HİYERARŞİK KATEGORİLER', sub: 'Sınırsız kırılımlı bilgi mimarisi',             img: '/screens/screen-05.png', accent: MINT_L   },
+  { tag: 'İÇGÖRÜ',        label: 'ANALİTİK & KPI',         sub: 'Veriyle yönetilen kararlar, görsel raporlar',   img: '/screens/screen-06.png', accent: NAVY     },
+  { tag: 'ÖĞRENME',       label: 'GERİ BİLDİRİM & ÖĞRENME',sub: 'Geri bildirimle sürekli iyileşen zekâ',         img: '/screens/screen-03.png', accent: GREEN_LL },
 ]
 
 // ─── Coverflow ayarları ───────────────────────────────────────────────────────
-const CARD_W       = 500   // aktif kart genişliği (daha da geniş)
-const CARD_H       = 440
+const CARD_W       = 600   // aktif kart genişliği (ekran görüntüsü oranına göre)
+const CARD_H       = 320
 const CARD_RADIUS  = 18
 const SPACING      = 380      // kartlar arası yatay mesafe (geniş kartlara göre)
 const PERSPECTIVE  = 1300
@@ -157,13 +157,24 @@ export default function Carousel3DFeatures() {
             <motion.div key={i} role="button" aria-label={card.label} tabIndex={0}
               onClick={() => setCurrent(i)}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setCurrent(i) }}
-              animate={{ x: p.x, z: p.z, rotateY: p.rotateY, scale: p.scale, opacity: p.opacity }}
+              animate={{ 
+                x: p.x, z: p.z, rotateY: p.rotateY, scale: p.scale, opacity: p.opacity, y: 0,
+                boxShadow: isCenter 
+                  ? `0 30px 80px rgba(0,0,0,0.7), 0 0 60px rgba(4, 120, 87, 0.55)` 
+                  : `0 15px 45px rgba(4, 120, 87, 0.35)`,
+                borderColor: isCenter ? card.accent + '80' : 'rgba(4, 120, 87, 0.3)'
+              }}
+              whileHover={{ 
+                y: -12,
+                boxShadow: isCenter 
+                  ? `0 40px 90px rgba(0,0,0,0.8), 0 0 80px rgba(4, 120, 87, 0.75)` 
+                  : `0 25px 60px rgba(4, 120, 87, 0.55)`
+              }}
               transition={{ type: 'spring', stiffness: 280, damping: 30 }}
               style={{ position: 'absolute', width: cardW, height: cardH, borderRadius: CARD_RADIUS, overflow: 'hidden',
                 cursor: 'pointer', zIndex: p.zIndex, filter: `brightness(${p.brightness})`,
                 pointerEvents: Math.abs(pos) <= 1 ? 'auto' : 'none', transformStyle: 'preserve-3d', outline: 'none',
-                border: `1px solid ${isCenter ? card.accent + '66' : 'rgba(255,255,255,0.08)'}`,
-                boxShadow: isCenter ? `0 30px 80px rgba(0,0,0,0.55), 0 0 40px ${card.accent}26` : '0 12px 40px rgba(0,0,0,0.4)' }}>
+                borderStyle: 'solid', borderWidth: '1px' }}>
               {/* Görsel */}
               <div style={{ position: 'absolute', inset: 0, backgroundImage: `url(${card.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }}/>
               {/* Koyu yeşil gradient perde */}

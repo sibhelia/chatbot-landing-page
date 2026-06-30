@@ -21,6 +21,7 @@ export default function App() {
   const [currentScene, setCurrentScene] = useState(0)
   const [page, setPage]                 = useState('scenes')  // 'scenes' | 'carousel' | 'landing'
   const [burst, setBurst]               = useState(false)     // geçiş patlaması aktif mi
+  const [burstKey, setBurstKey]         = useState(0)         // patlamayı zorla yeniden tetiklemek için
 
   const timerRef        = useRef(null)
   const explosionRef    = useRef(0)
@@ -57,15 +58,10 @@ export default function App() {
 
     lockRef.current = true
 
-    // Görkemli geçiş: yalnızca scenes ↔ carousel sınırında
-    const grand =
-      (pageRef.current === 'scenes'   && target === 'carousel') ||
-      (pageRef.current === 'carousel' && target === 'scenes')
-
-    if (grand) {
-      setBurst(true)
-      explosionRef.current = 1.35   // global bulut da patlar
-    }
+    // Her yukarı/aşağı sayfa geçişinde patlama (burst) efektini tetikle
+    setBurst(true)
+    setBurstKey(k => k + 1)
+    explosionRef.current = 1.35   // global bulut da patlar
 
     if (timerRef.current) clearInterval(timerRef.current)
     setPage(target)
@@ -109,6 +105,7 @@ export default function App() {
           explosionRef={explosionRef}
           page={page}
           burst={burst}
+          burstKey={burstKey}
           onBurstDone={() => setBurst(false)}
         />
       </div>
