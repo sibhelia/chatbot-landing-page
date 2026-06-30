@@ -27,10 +27,10 @@ const SPEED    = 5        // adım başına saniye
 const LOOP     = true
 
 const STEPS = [
-  { number: '01', title: 'BELGE YÜKLEME',   tag: 'GİRDİ',   description: 'Mevzuat, politika ve rehber belgeleriniz sisteme yüklenir. Kurumun bilgi tabanı tek noktada toplanır.', image: '/card_bg_3.png' },
-  { number: '02', title: 'İNDEKSLEME',      tag: 'İŞLEME',  description: 'Belgeler otomatik taranıp anlamsal vektör (ChromaDB) ve BM25 anahtar-kelime indekslerine dönüştürülür.', image: '/card_bg_5.png' },
-  { number: '03', title: 'ANLAMSAL ERİŞİM', tag: 'ERİŞİM',  description: 'Kullanıcı sorusu, hibrit retriever (Ensemble) ile en ilgili bağlamı saniyeler içinde bulur.', image: '/card_bg_4.png' },
-  { number: '04', title: 'ONAYLI YANIT',    tag: 'ÇIKTI',   description: 'Kaynağa dayalı yanıt üretilir; yöneticinin denetlediği yanıtlar "Onaylı" rozetiyle sunulur.', image: '/card_bg_1.png' },
+  { number: '01', title: 'BELGE YÜKLEME',   tag: 'GİRDİ',   description: 'Mevzuat, yönetmelik, politika ve rehber belgeleriniz sisteme yüklenir; kurumun dağınık bilgisi tek bir noktada toplanır. Hiyerarşik kategori yapısıyla içerikler düzenlenir, sürüm yönetimi sayesinde aynı belgenin eski ve yeni hâlleri birbirine karışmaz.', image: '/card_bg_3.png' },
+  { number: '02', title: 'İNDEKSLEME',      tag: 'İŞLEME',  description: 'Belgeler otomatik taranıp iki katmanda işlenir: çok dilli anlamsal vektör (ChromaDB) ve BM25 anahtar-kelime indeksi. Böylece sistem hem kelimelerin anlamını hem de tam eşleşmeleri yakalayacak biçimde, sorgulamaya hazır hâle gelir — manuel etiketleme gerektirmez.', image: '/card_bg_5.png' },
+  { number: '03', title: 'ANLAMSAL ERİŞİM', tag: 'ERİŞİM',  description: 'Kullanıcı sorusunu doğal dilde yazar; hibrit Ensemble Retriever en ilgili bağlamı saniyeler içinde getirir. Çok adımlı veya dolaylı sorularda ajan, geri aldığı kanıtı değerlendirip gerektiğinde aramayı yineler — yani cevaba ulaşana kadar akıl yürütür.', image: '/card_bg_4.png' },
+  { number: '04', title: 'ONAYLI YANIT',    tag: 'ÇIKTI',   description: 'Yanıt yalnızca bulunan kaynağa dayanarak üretilir; halüsinasyon önlenir. Yöneticinin onayladığı yanıtlar "Onaylı" rozetiyle sunulur ve gelecekte aynı soru sorulduğunda anlamsal atlama ile anında, daha da hızlı yanıtlanır.', image: '/card_bg_1.png' },
 ]
 
 export default function ProcessShowcase() {

@@ -176,13 +176,15 @@ function ManifestoSection() {
       </motion.h2>
       <motion.div variants={fadeUp} style={{ display: 'flex', gap: '4rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
         <p style={{ fontFamily: F_SPACE, fontSize: 'clamp(0.9rem, 1.4vw, 1.1rem)', color: 'rgba(255,255,255,0.55)', lineHeight: 1.8, maxWidth: '470px' }}>
-          QABot; kurumunuzun mevzuat, politika ve rehber belgelerini anlamsal olarak analiz eden, çalışanların
-          aradığı bilgiye saniyeler içinde — kaynağa dayalı ve doğru yanıtlarla — ulaşmasını sağlayan bir
-          Agentic RAG platformudur.
+          QABot; kurumunuzun mevzuat, politika ve rehber belgelerini anlamsal olarak analiz eden ajan tabanlı (agentic)
+          bir RAG platformudur. Çalışanların aradığı bilgiye saniyeler içinde — kaynağa dayalı, doğru ve denetlenebilir
+          yanıtlarla — ulaşmasını sağlar. Tek atışlı aramanın ötesine geçer; gerektiğinde sorguyu yeniden değerlendirip
+          en doğru bağlamı bulana kadar akıl yürütür.
         </p>
-        <p style={{ fontFamily: F_SPACE, fontSize: 'clamp(0.9rem, 1.4vw, 1.1rem)', color: 'rgba(255,255,255,0.35)', lineHeight: 1.8, maxWidth: '400px' }}>
-          Belge yığınlarını yönetilebilir bilgi bankalarına dönüştürürken, kullanıcı deneyimini ön planda tutan
-          modern bir arayüz ve kapsamlı bir yönetim paneli sunar.
+        <p style={{ fontFamily: F_SPACE, fontSize: 'clamp(0.9rem, 1.4vw, 1.1rem)', color: 'rgba(255,255,255,0.35)', lineHeight: 1.8, maxWidth: '420px' }}>
+          Devasa belge yığınlarını gezilebilir, yönetilebilir bilgi bankalarına dönüştürür; kullanıcı deneyimini ön
+          planda tutan modern bir sohbet arayüzü ve kod gerektirmeyen kapsamlı bir yönetim paneli sunar. Çok kiracılı
+          mimarisiyle farklı kurum ve departmanlar, kendi verileriyle güvenle çalışır.
         </p>
       </motion.div>
       {/* Kayan terim şeridi (marquee) */}
@@ -221,9 +223,14 @@ function FeaturedSection({ scrollContainer }) {
           background: 'linear-gradient(120deg, rgba(2,12,12,0.55) 0%, transparent 45%), linear-gradient(to top, rgba(2,12,12,0.85), transparent 60%)' }}/>
         <div style={{ position: 'absolute', bottom: '1.8rem', left: '2rem', right: '2rem' }}>
           <p style={{ fontFamily: F_ORBIT, fontSize: '8px', letterSpacing: '0.5em', color: GREEN_LL, textTransform: 'uppercase', marginBottom: '8px' }}>ÜRÜN ARAYÜZÜ</p>
-          <h3 style={{ fontFamily: F_ORBIT, fontWeight: 900, fontSize: 'clamp(1.1rem, 2.4vw, 2rem)', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+          <h3 style={{ fontFamily: F_ORBIT, fontWeight: 900, fontSize: 'clamp(1.1rem, 2.4vw, 2rem)', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.02em', marginBottom: '0.7rem' }}>
             AKILLI SOHBET & ONAYLI YANIT DENEYİMİ
           </h3>
+          <p style={{ fontFamily: F_SPACE, fontSize: 'clamp(0.85rem, 1.1vw, 1rem)', color: 'rgba(255,255,255,0.6)', lineHeight: 1.65, maxWidth: '620px' }}>
+            Çalışan sorusunu doğal dilde yazar; QABot ilgili belgeyi bulur, kaynağa dayalı yanıtı üretir ve yöneticinin
+            onayladığı yanıtları "Onaylı" rozetiyle sunar. Sade, hızlı ve güven veren bir sohbet deneyimi — tam da
+            kurumunuzun bilgi birikimiyle konuşuyormuş gibi.
+          </p>
         </div>
       </motion.div>
     </div>
@@ -234,10 +241,10 @@ function FeaturedSection({ scrollContainer }) {
 // BÖLÜM 02 — NEDEN QABOT (faydalar)
 // ════════════════════════════════════════════════════════════════════════════
 const BENEFITS = [
-  { icon: '⚡', stat: 3,   suffix: 'sn',  title: 'SANİYELER İÇİNDE YANIT', desc: 'Belgeler arasında kaybolmadan, aradığınız bilgiye anında ulaşın.', accent: GREEN_LL },
-  { icon: '✓',  stat: 100, suffix: '%',   title: 'KAYNAĞA DAYALI GÜVEN',   desc: 'Her yanıt belgeye dayanır; onaylananlar "Onaylı" rozetiyle gelir.', accent: GREEN_L },
-  { icon: '◆',  stat: 0,   suffix: ' kod', title: 'KODSUZ YÖNETİM',         desc: 'Stüdyo paneliyle kurumsal kimlik ve içerik tamamen sizin elinizde.', accent: MINT },
-  { icon: '↻',  stat: 24,  suffix: '/7',  title: 'SÜREKLİ ÖĞRENME',        desc: 'Geri bildirimlerle her etkileşimde daha doğru, daha kurumsal.', accent: NAVY },
+  { icon: '⚡', stat: 3,   suffix: 'sn',  title: 'SANİYELER İÇİNDE YANIT', desc: 'Onlarca sayfalık yönetmelik ve prosedür arasında kaybolmak yok. QABot, sorunun amacını anlayıp ilgili paragrafı saniyeler içinde önünüze getirir; çalışanlarınız beklemeden, doğru bilgiyle işine devam eder.', accent: GREEN_LL },
+  { icon: '✓',  stat: 100, suffix: '%',   title: 'KAYNAĞA DAYALI GÜVEN',   desc: 'Her yanıt, kurumunuzun kendi belgelerine dayanır — uydurma (halüsinasyon) yoktur. Yöneticinin onayladığı yanıtlar "Onaylı" rozetiyle sunulur, böylece kullanıcı gördüğü bilginin kurumca doğrulandığını anında bilir.', accent: GREEN_L },
+  { icon: '◆',  stat: 0,   suffix: ' kod', title: 'KODSUZ YÖNETİM',         desc: 'Logo, başlık, kategoriler ve içerikler tek satır kod yazmadan, stüdyo panelinden güncellenir. Sistem tamamen sizin kontrolünüzde ve kurumsal kimliğinize göre şekillenir; IT ekibine bağımlı kalmazsınız.', accent: MINT },
+  { icon: '↻',  stat: 24,  suffix: '/7',  title: 'SÜREKLİ ÖĞRENME',        desc: 'Kullanıcı geri bildirimleri ve yönetici düzeltmeleri anlık izlenir; onaylanan her yeni soru-cevap, anlamsal atlama mekanizmasıyla bilgi havuzuna eklenir. QABot her etkileşimde daha doğru, daha hızlı ve daha kurumsal hâle gelir.', accent: NAVY },
 ]
 
 // Tek fayda kartı — fare-takipli 3B eğim (tilt) + nabız atan ikon + kayan
@@ -309,9 +316,14 @@ function BenefitsSection() {
   return (
     <Section style={{ borderTop: `1px solid ${GREEN_L}1f` }}>
       <SectionLabel num="02" label="NEDEN QABOT" />
-      <motion.h2 variants={fadeUp} style={{ fontFamily: F_ORBIT, fontSize: 'clamp(1.8rem, 4vw, 3.4rem)', fontWeight: 900, color: '#fff', textTransform: 'uppercase', marginBottom: '3.5rem', letterSpacing: '-0.01em' }}>
+      <motion.h2 variants={fadeUp} style={{ fontFamily: F_ORBIT, fontSize: 'clamp(1.8rem, 4vw, 3.4rem)', fontWeight: 900, color: '#fff', textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '-0.01em' }}>
         KURUMSAL BİLGİDE FARK
       </motion.h2>
+      <motion.p variants={fadeUp} style={{ fontFamily: F_SPACE, fontSize: 'clamp(0.95rem, 1.3vw, 1.1rem)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.8, maxWidth: '760px', marginBottom: '3.5rem' }}>
+        Kurumlarda en değerli bilgi çoğu zaman PDF'lerin, yönetmeliklerin ve eski e-postaların içinde kilitli kalır.
+        Çalışanlar aradıklarını bulamaz, aynı sorular defalarca sorulur, doğru cevap kişiden kişiye değişir. QABot bu
+        döngüyü kırar: dağınık kurumsal bilgiyi, herkesin güvenebileceği tek ve akıllı bir yanıt kaynağına dönüştürür.
+      </motion.p>
       <motion.div ref={ref} variants={stagger(0.1)} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: '1.4rem' }}>
         {BENEFITS.map((b, i) => <BenefitCard key={i} b={b} i={i} inView={inView} />)}
       </motion.div>
@@ -344,11 +356,13 @@ function BenefitsSection() {
 // BÖLÜM 09 — SSS (açılır akordeon, AnimatePresence)
 // ════════════════════════════════════════════════════════════════════════════
 const FAQS = [
-  { q: 'QABot verilerimi nerede saklıyor?', a: 'İçerikler işaret ettiğiniz kurumsal altyapıda, vektörler ChromaDB üzerinde tutulur. Veri egemenliği tamamen sizde kalır.' },
-  { q: 'Hangi belge türlerini destekliyor?', a: 'Mevzuat, politika, rehber ve kurumsal dokümanlar başta olmak üzere metin tabanlı içerikler indekslenir.' },
-  { q: 'Yanıtların doğruluğu nasıl güvence altına alınıyor?', a: 'Hibrit erişim (vektör + BM25) ile kaynağa dayalı üretim birleştirilir; yöneticinin onayladığı yanıtlar "Onaylı" rozetiyle sunulur.' },
-  { q: 'Kurulum ne kadar sürer?', a: 'Belgeleri yükleyip kategorize ettikten sonra sistem otomatik indeksler; dakikalar içinde kullanıma hazır olur.' },
-  { q: 'Kurumsal kimliğe uyarlanabilir mi?', a: 'Evet. Stüdyo modülüyle logo, başlık ve tema kod yazmadan kurumsal kimliğinize göre özelleştirilir.' },
+  { q: 'QABot verilerimi nerede saklıyor? Verilerim güvende mi?', a: 'Kurumsal içerikleriniz işaret ettiğiniz altyapıda, anlamsal vektörler ise ChromaDB üzerinde tutulur; veri egemenliği tamamen sizde kalır. İçerikleriniz üçüncü taraflarla paylaşılmaz, model eğitimi için kullanılmaz. Çok kiracılı (multi-tenant) mimari sayesinde her kurumun verisi izole biçimde yönetilir.' },
+  { q: 'Hangi belge türlerini ve dilleri destekliyor?', a: 'Mevzuat, yönetmelik, politika, rehber ve kurumsal dokümanlar başta olmak üzere metin tabanlı içerikler indekslenir. Çok dilli anlamsal gömme modeli sayesinde Türkçe gibi göreli düşük kaynaklı dillerde dahi güçlü anlama sağlanır; sorular doğal dilde, gündelik ifadelerle sorulabilir.' },
+  { q: 'Yanıtların doğruluğu nasıl güvence altına alınıyor?', a: 'Hibrit erişim (anlamsal vektör + BM25 anahtar-kelime) en ilgili bağlamı bulur; yanıt yalnızca bu kaynağa dayanarak üretilir, böylece uydurma (halüsinasyon) önlenir. Yöneticinin onayladığı yanıtlar "Onaylı" rozetiyle sunulur. Canlı pilotta bağımsız değerlendiriciler sistemin gerçeğe uygunluğunu %91,7 olarak ölçmüştür.' },
+  { q: 'Kurulum ne kadar sürer, teknik ekip gerekir mi?', a: 'Belgeleri yükleyip kategorize ettikten sonra sistem otomatik tarar ve indeksler; dakikalar içinde kullanıma hazır olur. Yönetim ve özelleştirme stüdyo panelinden, kod yazmadan yapıldığı için ayrı bir geliştirme ekibine ihtiyaç duymazsınız.' },
+  { q: 'Kurumsal kimliğe uyarlanabilir mi?', a: 'Evet. Stüdyo modülüyle logo, başlık, renkler ve karşılama metinleri kod yazmadan kurumsal kimliğinize göre özelleştirilir. Asistan, kurumunuzun bir parçasıymış gibi görünür ve konuşur.' },
+  { q: 'Zamanla daha mı akıllı oluyor?', a: 'Evet. Kullanıcı geri bildirimleri ve yönetici düzeltmeleri kayıt altına alınır; onaylanan her yeni soru-cevap, anlamsal atlama (semantic bypass) mekanizmasıyla anlık bilgi havuzuna eklenir. Bu kayıtlara ilişkin gelecekteki sorular hem daha hızlı hem daha kesin yanıtlanır.' },
+  { q: 'Mevcut sistemlerle entegre olur mu?', a: 'QABot istemci-sunucu mimarisi ve API katmanı üzerine kuruludur; intranet, portal veya iç uygulamalarınıza gömülebilir. Kurumsal ihtiyaçlara göre özel entegrasyonlar Kurumsal planda sağlanır.' },
 ]
 
 function FaqItem({ q, a }) {

@@ -27,14 +27,14 @@ const LIGHT_FG = '#04241a'
 
 // 8 hücre — görsel (image) + metin (text) karışık
 const CELLS = [
-  { type: 'image', image: '/card_bg_3.png', tag: 'İK',     imageTitle: 'İK & ÖZLÜK',           imageDesc: 'Çalışanların izin, özlük ve prosedür sorularını anında, doğru kaynaktan yanıtlayın.' },
-  { type: 'text',  bg: DARK_BG,  fg: '#ffffff', title: 'HUKUK & UYUM',          desc: 'Mevzuat ve uyum dokümanlarında kaynağa dayalı, izlenebilir yanıtlar.' },
-  { type: 'image', image: '/card_bg_5.png', tag: 'DESTEK', imageTitle: 'MÜŞTERİ HİZMETLERİ',   imageDesc: 'Temsilcilere onaylı bilgiyle hızlı, tutarlı destek; tek tip yanıt kalitesi.' },
-  { type: 'text',  bg: LIGHT_BG, fg: LIGHT_FG,  title: 'TEKNİK DOKÜMANTASYON',  desc: 'Kılavuz ve prosedürlerde saniyeler içinde doğru adıma ulaşın.' },
-  { type: 'text',  bg: DARK_BG,  fg: '#ffffff', title: 'EĞİTİM & ONBOARDING',   desc: 'Yeni çalışanlar kurum bilgisine kendi kendine, hızlıca erişsin.' },
-  { type: 'image', image: '/card_bg_4.png', tag: 'BT',     imageTitle: 'BT & DESTEK',          imageDesc: 'Sık sorulan BT sorularını otomatik, onaylı yanıtlarla çözün.' },
-  { type: 'text',  bg: LIGHT_BG, fg: LIGHT_FG,  title: 'FİNANS & SATINALMA',    desc: 'Bütçe, fatura ve tedarik prosedürlerinde anında, doğru yanıt.' },
-  { type: 'image', image: '/card_bg_2.png', tag: 'KAMU',   imageTitle: 'KAMU & YÖNETMELİK',    imageDesc: 'Sık güncellenen yönetmeliklerde sürüm-duyarlı, güncel bilgi.' },
+  { type: 'image', image: '/card_bg_3.png', tag: 'İK',     imageTitle: 'İK & ÖZLÜK',           imageDesc: 'İzin, özlük, yan haklar ve prosedür sorularını çalışanlar kendi kendine, doğru kaynaktan yanıtlasın. İK ekibi tekrarlı sorulardan kurtulup gerçek işine odaklansın.' },
+  { type: 'text',  bg: DARK_BG,  fg: '#ffffff', title: 'HUKUK & UYUM',          desc: 'Mevzuat ve uyum dokümanlarında kaynağa dayalı, izlenebilir yanıtlar. Hangi maddeye dayandığı her zaman görünür; denetim ve uyum süreçleri kolaylaşır.' },
+  { type: 'image', image: '/card_bg_5.png', tag: 'DESTEK', imageTitle: 'MÜŞTERİ HİZMETLERİ',   imageDesc: 'Temsilciler, onaylı bilgiyle saniyeler içinde tutarlı yanıt verir. Yanıt kalitesi kişiden kişiye değişmez; her müşteri aynı doğru bilgiyi alır.' },
+  { type: 'text',  bg: LIGHT_BG, fg: LIGHT_FG,  title: 'TEKNİK DOKÜMANTASYON',  desc: 'Yüzlerce sayfalık kılavuz ve prosedür içinde doğru adımı saniyeler içinde bulun. Sürüm-duyarlı erişim sayesinde her zaman güncel talimata ulaşırsınız.' },
+  { type: 'text',  bg: DARK_BG,  fg: '#ffffff', title: 'EĞİTİM & ONBOARDING',   desc: 'Yeni çalışanlar kurum bilgisine kendi kendine, ilk günden erişsin. Oryantasyon yükü azalır, adaptasyon süresi belirgin biçimde kısalır.' },
+  { type: 'image', image: '/card_bg_4.png', tag: 'BT',     imageTitle: 'BT & DESTEK',          imageDesc: 'Sık sorulan BT ve sistem sorularını otomatik, onaylı yanıtlarla çözün. Destek talebi yükü düşer, çözüm süresi hızlanır.' },
+  { type: 'text',  bg: LIGHT_BG, fg: LIGHT_FG,  title: 'FİNANS & SATINALMA',    desc: 'Bütçe, fatura, harcama ve tedarik prosedürlerinde anında, doğru yanıt. Onay akışları ve kurallar herkes için tek ve net bir kaynaktan netleşir.' },
+  { type: 'image', image: '/card_bg_2.png', tag: 'KAMU',   imageTitle: 'KAMU & YÖNETMELİK',    imageDesc: 'Sık güncellenen yönetmeliklerde sürüm-duyarlı, güncel bilgi sunar. Vatandaş ve personel, doğru mevzuata kaynağıyla birlikte ulaşır.' },
 ]
 
 function ImageCell({ cell, hovered }) {
